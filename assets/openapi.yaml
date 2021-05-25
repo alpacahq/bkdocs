@@ -765,6 +765,59 @@ components:
         - type
         - time_in_force
     OrderObject:
+          $ref: '#/components/schemas/TrustedContact'
+    BankResource:
+      allOf:
+        - $ref: '#/components/schemas/IdentifiedResource'
+        - $ref: '#/components/schemas/BankData'
+        - type: object
+          properties:
+            account_id:
+              type: string
+              format: uuid
+            status:
+              type: string
+              enum:
+                - QUEUED
+                - CANCEL_REQUESTED
+                - SENT_TO_CLEARING
+                - APPROVED
+                - CANCELED
+          required:
+            - account_id
+            - status
+    BankData:
+      title: BankData
+      type: object
+      properties:
+        name:
+          type: string
+        bank_code:
+          type: string
+        bank_code_type:
+          type: string
+          enum:
+            - ABA
+            - BIC
+        country:
+          type: string
+        state_province:
+          type: string
+        postal_code:
+          type: string
+        city:
+          type: string
+        street_address:
+          type: string
+        account_number:
+          type: string
+      required:
+        - name
+        - bank_code
+        - bank_code_type
+        - account_number
+    IdentifiedResource:
+      title: IdentifiedResource
       type: object
       properties:
         id:
@@ -980,6 +1033,16 @@ components:
         client_order_id:
           type: string
           example: "61e69015-8549-4bfd-b9c3-01e75843f47d"
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+      required:
+        - id
+        - created_at
+        - updated_at
 paths:
   /accounts:
     get:
@@ -1100,6 +1163,8 @@ paths:
       responses:
         '204':
           description: No content.
+      operationId: delete_account
+      description: ''
   '/accounts/{account_id}/documents/upload':
     post:
       security:
@@ -1824,12 +1889,10 @@ paths:
             format: uuid
         - name: status
           in: query
-          required: true
           schema:
             type: string
         - name: bank_name
           in: query
-          required: true
           schema:
             type: string
       responses:
@@ -1838,38 +1901,13 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  id:
-                    type: string
-                    format: uuid
-                  name:
-                    type: string
-                  status:
-                    enum:
-                      - QUEUED
-                      - CANCEL_REQUESTED
-                      - SENT_TO_CLEARING
-                      - APPROVED
-                      - CANCELED
-                  account_id:
-                    type: string
-                    example: null
-                  clearing_id:
-                    type: string
-                    example: 8cf714bb-2d0d-4a8a-8aa2-e9ce99bb9d52
-                  created_at:
-                    type: string
-                    format: date-time
-                    example: '2021-04-24T23:16:49.272825Z'
-                  updated_at:
-                    type: string
-                    example: '2021-04-24T23:16:49.272825Z'
-                  deleted_at:
-                    type: string
-                    format: date-time
+                type: array
+                items:
+                  $ref: '#/components/schemas/BankResource'
         '400':
           description: Bad request. The body in the request is not valid.
+      operationId: get_recipient_banks
+      description: ''
     post:
       security:
         - BasicAuth: []
@@ -1884,45 +1922,19 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                name:
-                  type: string
-                  description: Name of recipient bank
-                  example: bank_name
-                bank_code_type:
-                  type: string
-                  description: ABA (Domestic) or BIC (International)
-                  example: ABA
-                bank_code:
-                  type: string
-                  description: 9-Digit ABA RTN (Routing Number) or BIC
-                  example: '123456789'
-                country:
-                  type: string
-                  description: Country where bank is located. Only for international banks.
-                state_province:
-                  type: string
-                  description: Province where bank is located. Only for international banks.
-                postal_code:
-                  type: string
-                  description: Postal code where bank is located. Only for international banks.
-                city:
-                  type: string
-                  description: Country where bank is located. Only for international banks.
-                street_address:
-                  type: string
-                  description: Country where bank is located. Only for international banks.
-                account_number:
-                  type: string
-                  description: Country where bank is located
+              $ref: '#/components/schemas/BankData'
       responses:
         '200':
           description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BankResource'
         '400':
           description: Bad Request
         '409':
           description: Conflict
+      operationId: post_recipient_banks
   '/accounts/{account_id}/recipient_banks/{bank_id}':
     delete:
       security:
@@ -1945,6 +1957,8 @@ paths:
           description: Bad Request
         '404':
           description: Bank Not Found
+      operationId: delete_recipient_bank
+      description: ''
   '/accounts/{account_id}/transfers':
     get:
       security:
