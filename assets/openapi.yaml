@@ -1043,6 +1043,91 @@ components:
         - id
         - created_at
         - updated_at
+    ACHRelationshipData:
+      description: ''
+      type: object
+      x-examples:
+        example-1:
+          account_owner_name: John Doe
+          bank_account_type: CHECKING
+          bank_account_number: 32131231abc
+          bank_routing_number: '121000358'
+          nickname: Bank of America Checking
+      properties:
+        account_owner_name:
+          type: string
+          minLength: 1
+        bank_account_type:
+          type: string
+          minLength: 1
+          enum:
+            - CHECKING
+            - SAVINGS
+        bank_account_number:
+          type: string
+          minLength: 1
+        bank_routing_number:
+          type: string
+          minLength: 1
+        nickname:
+          type: string
+          minLength: 1
+      required:
+        - account_owner_name
+        - bank_account_type
+        - bank_account_number
+        - bank_routing_number
+      title: ACHRelationshipData
+    ACHRelationshipResource:
+      title: ACHRelationshipResource
+      allOf:
+        - $ref: '#/components/schemas/IdentifiedResource'
+        - $ref: '#/components/schemas/ACHRelationshipData'
+        - type: object
+          properties:
+            account_id:
+              type: string
+              format: uuid
+            status:
+              type: string
+              enum:
+                - QUEUED
+                - APPROVED
+                - PENDING
+                - CANCEL_REQUESTED
+          required:
+            - account_id
+            - status
+    Error:
+      title: Error
+      type: object
+      properties:
+        code:
+          type: number
+        message:
+          type: string
+      required:
+        - code
+        - message
+  responses:
+    BadRequest:
+      description: Malformed input.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotAuthorized:
+      description: Client is not authorized for this operation.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Resource does not exist.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
 paths:
   /accounts:
     get:
@@ -2649,3 +2734,90 @@ paths:
                     enum:
                       - executed
                       - canceled
+  '/accounts/{account_id}/ach_relationships':
+    parameters:
+      - $ref: '#/components/parameters/AccountID'
+    get:
+      summary: Retrieve ACH Relationships for an account
+      tags:
+        - Accounts
+        - Funding
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ACHRelationshipResource'
+      operationId: get_ach_relationships
+      security:
+        - BasicAuth: []
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: statuses
+          description: Comma-separated status values
+    post:
+      summary: Create an ACH Relationship
+      operationId: post_ach_relationships
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ACHRelationshipResource'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/NotAuthorized'
+        '403':
+          description: The account already has an active relationship.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      description: ''
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ACHRelationshipData'
+      security:
+        - BasicAuth: []
+      tags:
+        - Accounts
+        - Funding
+  '/accounts/{account_id}/ach_relationships/{ach_relationship_id}':
+    parameters:
+      - $ref: '#/components/parameters/AccountID'
+      - schema:
+          type: string
+          format: uuid
+        name: ach_relationship_id
+        in: path
+        required: true
+        description: ACH relationship identifier
+    delete:
+      summary: Delete an existing ACH relationship
+      operationId: delete_ach_relationship
+      responses:
+        '204':
+          description: Success (No Content)
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          description: Cancelation is already in progress.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+        - BasicAuth: []
+      tags:
+        - Accounts
+        - Funding
