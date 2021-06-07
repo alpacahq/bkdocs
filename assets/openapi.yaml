@@ -499,44 +499,6 @@ components:
         - $ref: '#/components/schemas/Identity'
         - $ref: '#/components/schemas/Disclosures'
         - $ref: '#/components/schemas/TrustedContact'
-    Transfer:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          description: Unique identifier
-        account_id:
-          type: string
-          format: uuid
-          example: f4476e20-968a-4ebd-bfc2-110cd7832a4b
-        type:
-          type: string
-          enum:
-            - ach
-            - wire
-        status:
-          type: string
-          enum:
-            - QUEUED
-            - PENDING
-            - REJECTED
-            - APPROVED
-            - COMPLETE
-        amount:
-          type: string
-          format: decimal
-        direction:
-          type: string
-          enum:
-            - INCOMING
-            - OUTGOING
-        created_at:
-          type: string
-          format: date-time
-        updated_at:
-          type: string
-          format: date-time
     JournalJNLC:
       type: object
       properties:
@@ -1109,6 +1071,110 @@ components:
       required:
         - code
         - message
+    UntypedACHTransferData:
+      title: UntypedACHTransferData
+      allOf:
+        - $ref: '#/components/schemas/UntypedTransferData'
+        - type: object
+          properties:
+            relationship_id:
+              type: string
+              format: uuid
+          required:
+            - relationship_id
+    TransferResource:
+      title: TransferResource
+      allOf:
+        - $ref: '#/components/schemas/IdentifiedResource'
+        - type: object
+          properties:
+            type:
+              type: string
+              enum:
+                - ach
+                - wire
+            status:
+              type: string
+              enum:
+                - QUEUED
+                - PENDING
+                - REJECTED
+                - APPROVED
+                - COMPLETE
+            account_id:
+              type: string
+              format: uuid
+            reason:
+              type: string
+              nullable: true
+            expires_at:
+              type: string
+              format: date-time
+          required:
+            - type
+            - status
+            - account_id
+            - expires_at
+        - oneOf:
+            - $ref: '#/components/schemas/UntypedACHTransferData'
+            - $ref: '#/components/schemas/UntypedWireTransferData'
+          discriminator:
+            propertyName: type
+            mapping:
+              ach: '#/components/schemas/UntypedACHTransferData'
+              wire: '#/components/schemas/UntypedWireTransferData'
+    TransferData:
+      title: TransferData
+      allOf:
+        - type: object
+          properties:
+            transfer_type:
+              type: string
+              enum:
+                - ach
+                - wire
+            timing:
+              type: string
+              enum:
+                - immediate
+          required:
+            - transfer_type
+        - oneOf:
+            - $ref: '#/components/schemas/UntypedACHTransferData'
+            - $ref: '#/components/schemas/UntypedWireTransferData'
+          discriminator:
+            propertyName: transfer_type
+            mapping:
+              ach: '#/components/schemas/UntypedACHTransferData'
+              wire: '#/components/schemas/UntypedWireTransferData'
+    UntypedWireTransferData:
+      allOf:
+        - $ref: '#/components/schemas/UntypedTransferData'
+        - type: object
+          properties:
+            additional_information:
+              type: string
+            bank_id:
+              type: string
+              format: uuid
+          required:
+            - bank_id
+      title: UntypedWireTransferData
+    UntypedTransferData:
+      title: UntypedTransferData
+      type: object
+      properties:
+        amount:
+          type: string
+          format: decimal
+        direction:
+          type: string
+          enum:
+            - INCOMING
+            - OUTGOING
+      required:
+        - amount
+        - direction
   responses:
     BadRequest:
       description: Malformed input.
@@ -1204,6 +1270,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/AccountExtended'
+      operationId: get_account
     patch:
       security:
         - BasicAuth: []
@@ -1237,6 +1304,7 @@ paths:
             application/json:
               schema:
                 type: string
+      operationId: patch_account
     delete:
       security:
         - BasicAuth: []
@@ -1282,6 +1350,7 @@ paths:
                 type: string
   '/trading/accounts/{account_id}/account':
     get:
+      operationId: get_trading_account
       security:
         - BasicAuth: []
       summary: Retrieve trading details for an account.
@@ -2068,6 +2137,7 @@ paths:
             enum:
               - INCOMING
               - OUTGOING
+            type: string
         - name: limit
           in: query
           schema:
@@ -2086,7 +2156,8 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Transfer'
+                  $ref: '#/components/schemas/TransferResource'
+      operationId: get_transfers
     post:
       security:
         - BasicAuth: []
@@ -2109,33 +2180,15 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                amount:
-                  type: string
-                  format: decimal
-                  description: must be positive number
-                  example: '42000'
-                direction:
-                  type: string
-                  enum:
-                    - INCOMING
-                    - OUTGOING
-                timing:
-                  type: string
-                  enum:
-                    - immediate
-              required:
-                - amount
-                - direction
-                - timing
+              $ref: '#/components/schemas/TransferData'
       responses:
         '200':
           description: Successfully requested a transfer.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Transfer'
+                $ref: '#/components/schemas/TransferResource'
+      operationId: post_transfers
   /journals:
     get:
       security:
@@ -2816,6 +2869,31 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+      security:
+        - BasicAuth: []
+      tags:
+        - Accounts
+        - Funding
+  '/accounts/{account_id}/transfers/{transfer_id}':
+    parameters:
+      - schema:
+          type: string
+        name: account_id
+        in: path
+        required: true
+      - schema:
+          type: string
+        name: transfer_id
+        in: path
+        required: true
+    delete:
+      summary: Request to close a transfer
+      operationId: delete_transfer
+      responses:
+        '204':
+          description: Success (No Content)
+        '404':
+          $ref: '#/components/responses/NotFound'
       security:
         - BasicAuth: []
       tags:
