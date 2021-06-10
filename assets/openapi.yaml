@@ -708,59 +708,6 @@ components:
         - type
         - time_in_force
     OrderObject:
-          $ref: '#/components/schemas/TrustedContact'
-    BankResource:
-      allOf:
-        - $ref: '#/components/schemas/IdentifiedResource'
-        - $ref: '#/components/schemas/BankData'
-        - type: object
-          properties:
-            account_id:
-              type: string
-              format: uuid
-            status:
-              type: string
-              enum:
-                - QUEUED
-                - CANCEL_REQUESTED
-                - SENT_TO_CLEARING
-                - APPROVED
-                - CANCELED
-          required:
-            - account_id
-            - status
-    BankData:
-      title: BankData
-      type: object
-      properties:
-        name:
-          type: string
-        bank_code:
-          type: string
-        bank_code_type:
-          type: string
-          enum:
-            - ABA
-            - BIC
-        country:
-          type: string
-        state_province:
-          type: string
-        postal_code:
-          type: string
-        city:
-          type: string
-        street_address:
-          type: string
-        account_number:
-          type: string
-      required:
-        - name
-        - bank_code
-        - bank_code_type
-        - account_number
-    IdentifiedResource:
-      title: IdentifiedResource
       type: object
       properties:
         id:
@@ -982,6 +929,76 @@ components:
         updated_at:
           type: string
           format: date-time
+      required:
+        - id
+        - created_at
+        - updated_at
+    BankResource:
+      allOf:
+        - $ref: '#/components/schemas/IdentifiedResource'
+        - $ref: '#/components/schemas/BankData'
+        - type: object
+          properties:
+            account_id:
+              type: string
+              format: uuid
+            status:
+              type: string
+              enum:
+                - QUEUED
+                - CANCEL_REQUESTED
+                - SENT_TO_CLEARING
+                - APPROVED
+                - CANCELED
+          required:
+            - account_id
+            - status
+    BankData:
+      title: BankData
+      type: object
+      properties:
+        name:
+          type: string
+        bank_code:
+          type: string
+        bank_code_type:
+          type: string
+          enum:
+            - ABA
+            - BIC
+        country:
+          type: string
+        state_province:
+          type: string
+        postal_code:
+          type: string
+        city:
+          type: string
+        street_address:
+          type: string
+        account_number:
+          type: string
+      required:
+        - name
+        - bank_code
+        - bank_code_type
+        - account_number
+    IdentifiedResource:
+      title: IdentifiedResource
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: "61e69015-8549-4bfd-b9c3-01e75843f47d"
+        created_at:
+          type: string
+          format: date-time
+          example: "2021-03-16T18:38:01.942282Z"
+        updated_at:
+          type: string
+          format: date-time
+          example: "2021-03-16T18:38:01.942282Z"
       required:
         - id
         - created_at
