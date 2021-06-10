@@ -37,25 +37,6 @@ components:
       schema:
         type: string
         format: uuid
-  responses:
-    Forbidden:
-      description: Request is forbidden
-      content:
-        application/json:
-          schema:
-            type: string
-    Invalid:
-      description: Request body format is invalid or request parameters are invalid
-      content:
-        application/json:
-          schema:
-            type: string
-    NotFound:
-      description: Resource not found
-      content:
-        application/json:
-          schema:
-            type: string
   schemas:
     Account:
       type: object
@@ -1176,6 +1157,12 @@ components:
         - amount
         - direction
   responses:
+    Forbidden:
+      description: Request is forbidden
+      content:
+        application/json:
+          schema:
+            type: string
     BadRequest:
       description: Malformed input.
       content:
@@ -1540,7 +1527,7 @@ paths:
                 items:
                   $ref: "#/components/schemas/OrderObject"
         "400":
-          $ref: "#/components/responses/Invalid"
+          $ref: "#/components/responses/BadRequest"
         "404":
           $ref: "#/components/responses/NotFound"
     post:
@@ -1564,7 +1551,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/OrderObject"
         "400":
-          $ref: "#/components/responses/Invalid"
+          $ref: "#/components/responses/BadRequest"
         "403":
           $ref: "#/components/responses/Forbidden"
         "404":
@@ -1593,7 +1580,7 @@ paths:
                     body:
                       $ref: "#/components/schemas/OrderObject"
         "400":
-          $ref: "#/components/responses/Invalid"
+          $ref: "#/components/responses/BadRequest"
         "404":
           $ref: "#/components/responses/NotFound"
   /trading/accounts/{account_id}/orders/{order_id}:
@@ -1615,7 +1602,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/OrderObject"
         "400":
-          $ref: "#/components/responses/Invalid"
+          $ref: "#/components/responses/BadRequest"
         "404":
           $ref: "#/components/responses/NotFound"
     patch:
@@ -1639,7 +1626,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/OrderObject"
         "400":
-          $ref: "#/components/responses/Invalid"
+          $ref: "#/components/responses/BadRequest"
         "403":
           $ref: "#/components/responses/Forbidden"
         "404":
@@ -1655,7 +1642,7 @@ paths:
         "204":
           description: OK
         "400":
-          $ref: "#/components/responses/Invalid"
+          $ref: "#/components/responses/BadRequest"
         "404":
           $ref: "#/components/responses/NotFound"
   /assets:
