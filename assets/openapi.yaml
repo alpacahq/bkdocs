@@ -14,34 +14,6 @@ components:
       type: http
       scheme: basic
   parameters:
-    ActivityType:
-      in: path
-      name: activity_type
-      required: true
-      schema:
-        type: string
-        enum:
-          - FILL
-          - ACATC
-          - ACATS
-          - CSD
-          - CSR
-          - CSW
-          - DIV
-          - DIVCGL
-          - DIVCGS
-          - DIVNRA
-          - DIVROC
-          - DIVTXEX
-          - INT
-          - JNLC
-          - JNLS
-          - MA
-          - NC
-          - PTC
-          - REORG
-          - SSO
-          - SSP
     Status:
       name: status
       in: query
@@ -66,7 +38,7 @@ components:
       schema:
         type: string
         format: date-time
-        example: '2021-03-16T18:38:01.942282Z'
+        example: "2021-03-16T18:38:01.942282Z"
     Until:
       name: until
       in: query
@@ -74,7 +46,7 @@ components:
       schema:
         type: string
         format: date-time
-        example: '2021-03-16T18:38:01.942282Z'
+        example: "2021-03-16T18:38:01.942282Z"
     Direction:
       name: direction
       in: query
@@ -88,7 +60,7 @@ components:
     Nested:
       name: nested
       in: query
-      description: 'If true, the result will roll up multi-leg orders under the legs field of primary order.'
+      description: If true, the result will roll up multi-leg orders under the legs field of primary order.
       schema:
         type: boolean
         example: false
@@ -98,7 +70,7 @@ components:
       description: A comma-separated list of symbols to filter by.
       schema:
         type: string
-        example: 'AAPL,TSLA,MSFT'
+        example: AAPL,TSLA,MSFT
     AccountID:
       name: account_id
       in: path
@@ -180,144 +152,6 @@ components:
         The account is disabled after ACTIVE status.
         - **ACCOUNT_CLOSED**
         The account is closed.
-    ActivityType:
-      title: ActivityType
-      type: string
-      enum:
-        - FILL
-        - ACATC
-        - ACATS
-        - CSD
-        - CSR
-        - CSW
-        - DIV
-        - DIVCGL
-        - DIVCGS
-        - DIVNRA
-        - DIVROC
-        - DIVTXEX
-        - INT
-        - JNLC
-        - JNLS
-        - MA
-        - NC
-        - PTC
-        - REORG
-        - SSO
-        - SSP
-    Activity:
-      title: Activity
-      type: object
-      description: Base for activity types
-      properties:
-        id:
-          type: string
-          format: uuid
-          example: 20210510100104650::88b5f678-fef5-447b-af15-f21e367e6d8c
-        account_id:
-          type: string
-          format: uuid
-          example: c8f1ef5d-edc0-4f23-9ee4-378f19cb92a4
-        activity_type:
-          $ref: '#/components/schemas/ActivityType'
-    TradeActivity:
-      title: TradeActivity
-      allOf:
-        - $ref: '#/components/schemas/Activity'
-        - type: object
-          properties:
-            transaction_time:
-              type: string
-              format: timestamp
-              example: '2021-05-10T14:01:04.650275Z'
-            type:
-              type: string
-              enum:
-                - fill
-                - partial_fill
-              example: fill
-            price:
-              type: string
-              example: 3.1415
-            qty:
-              type: string
-              example: 0.38921
-            side:
-              type: string
-              enum:
-                - buy
-                - sell
-              example: sell
-            symbol:
-              type: string
-              example: AAPL
-            leaves_qty:
-              type: string
-              example: 0.5123
-            order_id:
-              type: string
-              format: uuid
-              example: fe060a1b-5b45-4eba-ba46-c3a3345d8255
-            cum_qty:
-              type: string
-              example: 0.9723
-            order_status:
-              type: string
-              enum:
-                - new
-                - partially_filled
-                - filled
-                - done_for_day
-                - canceled
-                - expired
-                - replaced
-                - pending_cancel
-                - pending_replace
-                - accepted
-                - pending_new
-                - accepted_for_bidding
-                - stopped
-                - rejected
-                - suspended
-                - calculated
-              example: filled
-    NonTradeActivity:
-      title: NonTradeActivity
-      allOf:
-        - $ref: '#/components/schemas/Activity'
-        - type: object
-          properties:
-            date:
-              type: string
-              format: date
-              example: '2021-05-21'
-            net_amount:
-              type: string
-              example: 1234
-            description:
-              type: string
-              example: Example description
-            status:
-              type: string
-              enum:
-                - executed
-                - correct
-                - canceled
-              example: executed
-            symbol:
-              type: string
-              example: AAPL
-            qty:
-              type: string
-              example: 0.38921
-            per_share_amount:
-              type: string
-              example: 0.38921
-    ActivityItem:
-      title: ActivityItem
-      anyOf:
-        - $ref: '#/components/schemas/TradeActivity'
-        - $ref: '#/components/schemas/NonTradeActivity'
     DocumentType:
       type: string
       enum:
@@ -341,9 +175,6 @@ components:
         - cip_result:
           initial CIP result
       example: identity_verification
-    StreetAddress:
-      type: string
-      example: 20 N San Mateo Dr
     Contact:
       type: object
       description: |
@@ -360,7 +191,8 @@ components:
         street_address:
           type: array
           items:
-            $ref: '#/components/schemas/StreetAddress'
+            type: string
+            example: 20 N San Mateo Dr
         city:
           type: string
           example: San Mateo
@@ -370,6 +202,9 @@ components:
         postal_code:
           type: string
           example: '94401'
+        country:
+          type: string
+          example: USA
     Identity:
       type: object
       description: |
@@ -522,30 +357,6 @@ components:
           type: object
         addidional_information:
           type: string
-    Agreement:
-      type: object
-      properties:
-        agreement:
-          type: string
-          enum:
-            - margin_agreement
-            - account_agreement
-            - customer_agreement
-          description: |
-            - margin_agreement: Alpaca Margin Agreement
-            - account_agreement: Alpaca Account Agreement
-            - customer_agreement: Alpaca Customer Agreement
-        signed_at:
-          type: string
-          example: '2019-09-11T18:09:33Z'
-        ip_address:
-          type: string
-          format: ipv4
-          example: 185.13.21.99
-      required:
-        - agreement
-        - signed_at
-        - ip_address
     Agreements:
       type: array
       description: |
@@ -553,7 +364,30 @@ components:
         Margin Agreement to the end user, and have them read
         full sentences.
       items:
-        $ref: '#/components/schemas/Agreement'
+        type: object
+        properties:
+          agreement:
+            type: string
+            enum:
+              - margin_agreement
+              - account_agreement
+              - customer_agreement
+            description: |
+              - margin_agreement: Alpaca Margin Agreement
+              - account_agreement: Alpaca Account Agreement
+              - customer_agreement: Alpaca Customer Agreement
+          signed_at:
+            type: string
+            format: date-time
+            example: '2020-09-11T18:09:33Z'
+          ip_address:
+            type: string
+            format: ipv4
+            example: 185.13.21.99
+        required:
+          - agreement
+          - signed_at
+          - ip_address
     ApplicationDocument:
       type: object
       description: |
@@ -565,6 +399,7 @@ components:
           type: string
           format: uuid
         document_type:
+          type: string
           $ref: '#/components/schemas/DocumentType'
         document_sub_type:
           type: string
@@ -668,60 +503,42 @@ components:
         family_name: Doe
         email_address: jane.doe@example.com
     AccountExtended:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        account_number:
-          type: string
-        status:
-          $ref: '#/components/schemas/AccountStatus'
-        currency:
-          type: string
-          description: Always "USD"
-        created_at:
-          type: string
-          format: date-time
-        last_equity:
-          type: string
-          format: decimal
-        kyc_results:
-          $ref: '#/components/schemas/KycResult'
-        contact:
-          $ref: '#/components/schemas/Contact'
-        identity:
-          $ref: '#/components/schemas/Identity'
-        disclosures:
-          $ref: '#/components/schemas/Disclosures'
-        agreements:
-          $ref: '#/components/schemas/Agreements'
-        documents:
-          type: array
-          items:
-            $ref: '#/components/schemas/ApplicationDocument'
-        trusted_contact:
-          $ref: '#/components/schemas/TrustedContact'
+      allOf:
+        - $ref: '#/components/schemas/Account'
+        - type: object
+          properties:
+            contact:
+              $ref: '#/components/schemas/Contact'
+            identity:
+              $ref: '#/components/schemas/Identity'
+            disclosures:
+              $ref: '#/components/schemas/Disclosures'
+            agreements:
+              $ref: '#/components/schemas/Agreements'
+            documents:
+              type: array
+              items:
+                $ref: '#/components/schemas/ApplicationDocument'
+            trusted_contact:
+              $ref: '#/components/schemas/TrustedContact'
+      example:
+        id: 0d18ae51-3c94-4511-b209-101e1666416b
+        account_number: '9034005019'
+        status: APPROVED
+        currency: USD
+        created_at: '2019-09-30T23:55:31.185998Z'
+        contact: {}
+        identity: {}
+        agreements: []
+        trusted_contact: {}
     AccountUpdate:
-      type: object
-      properties:
-        contact:
-          $ref: '#/components/schemas/Contact'
-        identity:
-          $ref: '#/components/schemas/Identity'
-        disclosures:
-          $ref: '#/components/schemas/Disclosures'
-        trustedContact:
-          $ref: '#/components/schemas/TrustedContact'
+      allOf:
+        - $ref: '#/components/schemas/Contact'
+        - $ref: '#/components/schemas/Identity'
+        - $ref: '#/components/schemas/Disclosures'
+        - $ref: '#/components/schemas/TrustedContact'
     JournalJNLC:
       type: object
-      example:
-        id: f45g67h8-d1fc-4136-aa4f-cf4460aecdfc
-        entry_type: JNLC
-        from_account: 8fjkjn-4483-4199-840f-6c5fe0b7ca24
-        to_account: 3gtt65jd-6f2a-433c-8c33-17b66b8941fa
-        status: pending
-        net_amount: '115.5'
       properties:
         id:
           type: string
@@ -743,16 +560,12 @@ components:
         settle_date:
           type: string
           format: date
-          nullable: true
         status:
           type: string
           enum:
             - pending
             - canceled
             - executed
-            - queued
-            - rejected
-            - deleted
         net_amount:
           type: string
           format: decimal
@@ -778,17 +591,15 @@ components:
         - to_account
         - settle_date
         - net_amount
-    JournalJNLS:
-      type: object
       example:
-        id: h7h5g33f-ef01-4458-9a4b-9598727a406f
-        entry_type: JNLS
+        id: f45g67h8-d1fc-4136-aa4f-cf4460aecdfc
+        entry_type: JNLC
         from_account: 8fjkjn-4483-4199-840f-6c5fe0b7ca24
         to_account: 3gtt65jd-6f2a-433c-8c33-17b66b8941fa
-        status: executed
-        symbol: AAPL
-        qty: '2'
-        price: '128.23'
+        status: pending
+        net_amount: '115.5'
+    JournalJNLS:
+      type: object
       properties:
         id:
           type: string
@@ -808,16 +619,12 @@ components:
         settle_date:
           type: string
           format: date
-          nullable: true
         status:
           type: string
           enum:
             - pending
             - canceled
             - executed
-            - queued
-            - rejected
-            - deleted
         symbol:
           type: string
         qty:
@@ -835,6 +642,15 @@ components:
         - symbol
         - qty
         - price
+      example:
+        id: h7h5g33f-ef01-4458-9a4b-9598727a406f
+        entry_type: JNLS
+        from_account: 8fjkjn-4483-4199-840f-6c5fe0b7ca24
+        to_account: 3gtt65jd-6f2a-433c-8c33-17b66b8941fa
+        status: executed
+        symbol: AAPL
+        qty: '2'
+        price: '128.23'
     AccountCreationObject:
       type: object
       properties:
@@ -851,7 +667,7 @@ components:
           items:
             $ref: '#/components/schemas/DocumentUpload'
         trusted_contact:
-          $ref: '#/components/schemas/TrustedContact'
+          $ref: "#/components/schemas/TrustedContact"
     CreateOrder:
       type: object
       properties:
@@ -912,7 +728,7 @@ components:
           example: false
         client_order_id:
           type: string
-          example: eb9e2aaa-f71a-4f51-b5b4-52a6c565dad4
+          example: "eb9e2aaa-f71a-4f51-b5b4-52a6c565dad4"
         order_class:
           type: string
           enum:
@@ -954,61 +770,61 @@ components:
         id:
           type: string
           format: uuid
-          example: 61e69015-8549-4bfd-b9c3-01e75843f47d
+          example: "61e69015-8549-4bfd-b9c3-01e75843f47d"
         client_order_id:
           type: string
-          example: 61e69015-8549-4bfd-b9c3-01e75843f47d
+          example: "61e69015-8549-4bfd-b9c3-01e75843f47d"
         created_at:
           type: string
           format: date-time
-          example: '2021-03-16T18:38:01.942282Z'
+          example: "2021-03-16T18:38:01.942282Z"
         updated_at:
           type: string
           format: date-time
-          example: '2021-03-16T18:38:01.942282Z'
+          example: "2021-03-16T18:38:01.942282Z"
         submitted_at:
           type: string
           format: date-time
-          example: '2021-03-16T18:38:01.942282Z'
+          example: "2021-03-16T18:38:01.942282Z"
         filled_at:
           nullable: true
           type: string
           format: date-time
-          example: '2021-03-16T18:38:01.942282Z'
+          example: "2021-03-16T18:38:01.942282Z"
         expired_at:
           nullable: true
           type: string
           format: date-time
-          example: '2021-03-16T18:38:01.942282Z'
+          example: "2021-03-16T18:38:01.942282Z"
         canceled_at:
           nullable: true
           type: string
           format: date-time
-          example: '2021-03-16T18:38:01.942282Z'
+          example: "2021-03-16T18:38:01.942282Z"
         failed_at:
           nullable: true
           type: string
           format: date-time
-          example: '2021-03-16T18:38:01.942282Z'
+          example: "2021-03-16T18:38:01.942282Z"
         replaced_at:
           nullable: true
           type: string
           format: date-time
-          example: '2021-03-16T18:38:01.942282Z'
+          example: "2021-03-16T18:38:01.942282Z"
         replaced_by:
           nullable: true
           type: string
           format: uuid
-          example: 61e69015-8549-4bfd-b9c3-01e75843f47d
+          example: "61e69015-8549-4bfd-b9c3-01e75843f47d"
         replaces:
           nullable: true
           type: string
           format: uuid
-          example: 61e69015-8549-4bfd-b9c3-01e75843f47d
+          example: "61e69015-8549-4bfd-b9c3-01e75843f47d"
         asset_id:
           type: string
           format: uuid
-          example: 61e69015-8549-4bfd-b9c3-01e75843f47d
+          example: "61e69015-8549-4bfd-b9c3-01e75843f47d"
         symbol:
           type: string
           example: AALP
@@ -1112,7 +928,7 @@ components:
           nullable: true
           type: array
           items:
-            $ref: '#/components/schemas/OrderObject'
+            $ref: "#/components/schemas/OrderObject"
         trail_price:
           nullable: true
           type: string
@@ -1163,7 +979,7 @@ components:
           example: 3.14
         client_order_id:
           type: string
-          example: 61e69015-8549-4bfd-b9c3-01e75843f47d
+          example: "61e69015-8549-4bfd-b9c3-01e75843f47d"
         created_at:
           type: string
           format: date-time
@@ -1231,15 +1047,15 @@ components:
         id:
           type: string
           format: uuid
-          example: 61e69015-8549-4bfd-b9c3-01e75843f47d
+          example: "61e69015-8549-4bfd-b9c3-01e75843f47d"
         created_at:
           type: string
           format: date-time
-          example: '2021-03-16T18:38:01.942282Z'
+          example: "2021-03-16T18:38:01.942282Z"
         updated_at:
           type: string
           format: date-time
-          example: '2021-03-16T18:38:01.942282Z'
+          example: "2021-03-16T18:38:01.942282Z"
       required:
         - id
         - created_at
@@ -1247,6 +1063,13 @@ components:
     ACHRelationshipData:
       description: ''
       type: object
+      x-examples:
+        example-1:
+          account_owner_name: John Doe
+          bank_account_type: CHECKING
+          bank_account_number: 32131231abc
+          bank_routing_number: '121000358'
+          nickname: Bank of America Checking
       properties:
         account_owner_name:
           type: string
@@ -1407,214 +1230,6 @@ components:
       required:
         - amount
         - direction
-    JournalData:
-      title: JournalData
-      type: object
-      properties:
-        entry_type:
-          type: string
-          enum:
-            - JNLC
-            - JNLS
-        from_account:
-          type: string
-          format: uuid
-        to_account:
-          type: string
-          format: uuid
-        amount:
-          type: string
-          format: decimal
-          description: |
-            Required for JNLC.
-            The dollar amount to move. It has to be
-            a positive value.
-        symbol:
-          type: string
-          description: |
-            Required for JNLS.
-        qty:
-          type: string
-          format: decimal
-          description: |
-            Required for JNLS.
-            The number of shares to move. It has to be
-            a positive value.
-      required:
-        - entry_type
-        - from_account
-        - to_account
-    JournalResource:
-      title: JournalResource
-      oneOf:
-        - $ref: '#/components/schemas/JournalJNLC'
-        - $ref: '#/components/schemas/JournalJNLS'
-      discriminator:
-        propertyName: entry_type
-        mapping:
-          JNLC: '#/components/schemas/JournalJNLC'
-          JNLS: '#/components/schemas/JournalJNLS'
-    BatchJournalRequest:
-      title: BatchJournalRequest
-      type: object
-      properties:
-        entry_type:
-          type: string
-          enum:
-            - JNLC
-        from_account:
-          type: string
-          format: uuid
-        description:
-          type: string
-        entries:
-          type: array
-          items:
-            type: object
-            properties:
-              to_account:
-                type: string
-                format: uuid
-              amount:
-                type: string
-            required:
-              - to_account
-              - amount
-      required:
-        - entry_type
-        - from_account
-    BatchJournalResponse:
-      title: BatchJournalResponse
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        error_message:
-          type: string
-        entry_type:
-          type: string
-          enum:
-            - JNLC
-        from_account:
-          type: string
-          format: uuid
-        to_account:
-          type: string
-          format: uuid
-        symbol:
-          type: string
-        qty:
-          type: string
-          nullable: true
-        price:
-          type: string
-        status:
-          type: string
-          enum:
-            - pending
-            - canceled
-            - executed
-            - queued
-            - rejected
-            - deleted
-        settle_date:
-          type: string
-          nullable: true
-        system_date:
-          type: string
-          nullable: true
-        net_amount:
-          type: string
-        description:
-          type: string
-      required:
-        - id
-        - error_message
-        - entry_type
-        - from_account
-        - to_account
-        - symbol
-        - qty
-        - price
-        - status
-        - settle_date
-        - system_date
-        - net_amount
-        - description
-    AssetResource:
-      title: AssetResource
-      type: object
-      properties:
-        id:
-          type: string
-          example: 904837e3-3b76-47ec-b432-046db621571b
-        class:
-          type: string
-          example: us_equity
-        exchange:
-          type: string
-          example: NASDAQ
-        symbol:
-          type: string
-          example: AAPL
-        name:
-          type: string
-          example: Apple Inc. Common Stock
-        status:
-          type: string
-          example: active
-        tradable:
-          type: boolean
-          example: true
-        marginable:
-          type: boolean
-          example: true
-        shortable:
-          type: boolean
-          example: true
-        easy_to_borrow:
-          type: boolean
-          example: true
-        fractionable:
-          type: boolean
-          example: true
-    Position:
-      description: ''
-      type: object
-      properties:
-        asset_id:
-          type: string
-        symbol:
-          type: string
-        exchange:
-          type: string
-        asset_class:
-          type: string
-        avg_entry_price:
-          type: string
-        qty:
-          type: string
-        side:
-          type: string
-        market_value:
-          type: string
-        cost_basis:
-          type: string
-        unrealized_pl:
-          type: string
-        unrealized_plpc:
-          type: string
-        unrealized_intraday_pl:
-          type: string
-        unrealized_intraday_plpc:
-          type: string
-        current_price:
-          type: string
-        lastday_price:
-          type: string
-        change_today:
-          type: string
   responses:
     Forbidden:
       description: Request is forbidden
@@ -1667,7 +1282,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Account'
+                  $ref: '#/components/schemas/AccountExtended'
     post:
       security:
         - BasicAuth: []
@@ -1929,38 +1544,37 @@ paths:
                   clearing_broker:
                     type: string
                     example: Velox
-  '/trading/accounts/{account_id}/orders':
+  /trading/accounts/{account_id}/orders:
     parameters:
-      - $ref: '#/components/parameters/AccountID'
+      - $ref: "#/components/parameters/AccountID"
     get:
       parameters:
-        - $ref: '#/components/parameters/Status'
-        - $ref: '#/components/parameters/Limit'
-        - $ref: '#/components/parameters/After'
-        - $ref: '#/components/parameters/Until'
-        - $ref: '#/components/parameters/Direction'
-        - $ref: '#/components/parameters/Nested'
-        - $ref: '#/components/parameters/Symbols'
+        - $ref: "#/components/parameters/Status"
+        - $ref: "#/components/parameters/Limit"
+        - $ref: "#/components/parameters/After"
+        - $ref: "#/components/parameters/Until"
+        - $ref: "#/components/parameters/Direction"
+        - $ref: "#/components/parameters/Nested"
+        - $ref: "#/components/parameters/Symbols"
       security:
         - BasicAuth: []
-      summary: 'Retrieves a list of orders for the account, filtered by the supplied query parameters.'
+      summary: Retrieves a list of orders for the account, filtered by the supplied query parameters.
       tags:
         - Trading
-      description: 'Retrieves a list of orders for the account, filtered by the supplied query parameters.'
+      description: Retrieves a list of orders for the account, filtered by the supplied query parameters.
       responses:
-        '200':
-          description: 'Retrieves a list of orders for the account, filtered by the supplied query parameters.'
+        "200":
+          description: Retrieves a list of orders for the account, filtered by the supplied query parameters.
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/OrderObject'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '404':
-          $ref: '#/components/responses/NotFound'
-      operationId: get_orders
+                  $ref: "#/components/schemas/OrderObject"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
     post:
       security:
         - BasicAuth: []
@@ -1969,25 +1583,24 @@ paths:
         - Trading
       description: Create an order for an account.
       requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CreateOrder'
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreateOrder"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/OrderObject'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '404':
-          $ref: '#/components/responses/NotFound'
-      operationId: post_orders
+                $ref: "#/components/schemas/OrderObject"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
     delete:
       security:
         - BasicAuth: []
@@ -1996,7 +1609,7 @@ paths:
         - Trading
       description: Attempts to cancel all open orders. A response will be provided for each order that is attempted to be cancelled.
       responses:
-        '207':
+        "207":
           description: OK
           content:
             application/json:
@@ -2010,16 +1623,15 @@ paths:
                     status:
                       type: integer
                     body:
-                      $ref: '#/components/schemas/OrderObject'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '404':
-          $ref: '#/components/responses/NotFound'
-      operationId: delete_orders
-  '/trading/accounts/{account_id}/orders/{order_id}':
+                      $ref: "#/components/schemas/OrderObject"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
+  /trading/accounts/{account_id}/orders/{order_id}:
     parameters:
-      - $ref: '#/components/parameters/AccountID'
-      - $ref: '#/components/parameters/OrderID'
+      - $ref: "#/components/parameters/AccountID"
+      - $ref: "#/components/parameters/OrderID"
     get:
       security:
         - BasicAuth: []
@@ -2028,44 +1640,42 @@ paths:
         - Trading
       description: Retrieves a single order for the given order_id.
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/OrderObject'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '404':
-          $ref: '#/components/responses/NotFound'
-      operationId: get_order
+                $ref: "#/components/schemas/OrderObject"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
     patch:
       security:
-        - BasicAuth: []
+      - BasicAuth: []
       summary: Replaces a single order with updated parameters. Each parameter overrides the corresponding attribute of the existing order.
       tags:
         - Trading
       description: Replaces a single order with updated parameters. Each parameter overrides the corresponding attribute of the existing order.
       requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PatchOrder'
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PatchOrder"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/OrderObject'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '404':
-          $ref: '#/components/responses/NotFound'
-      operationId: patch_order
+                $ref: "#/components/schemas/OrderObject"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
     delete:
       security:
         - BasicAuth: []
@@ -2074,13 +1684,12 @@ paths:
         - Trading
       description: Attempts to cancel an open order.
       responses:
-        '204':
+        "204":
           description: OK
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '404':
-          $ref: '#/components/responses/NotFound'
-      operationId: delete_order
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
   /assets:
     get:
       security:
@@ -2095,10 +1704,41 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/AssetResource'
-      operationId: get_assets
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: 904837e3-3b76-47ec-b432-046db621571b
+                  class:
+                    type: string
+                    example: us_equity
+                  exchange:
+                    type: string
+                    example: NASDAQ
+                  symbol:
+                    type: string
+                    example: AAPL
+                  name:
+                    type: string
+                    example: Apple Inc. Common Stock
+                  status:
+                    type: string
+                    example: active
+                  tradable:
+                    type: boolean
+                    example: true
+                  marginable:
+                    type: boolean
+                    example: true
+                  shortable:
+                    type: boolean
+                    example: true
+                  easy_to_borrow:
+                    type: boolean
+                    example: true
+                  fractionable:
+                    type: boolean
+                    example: true
   '/assets/{asset_id}':
     get:
       security:
@@ -2594,12 +2234,14 @@ paths:
           schema:
             type: string
             format: date
+          required: true
           description: by settle_date
         - name: before
           in: query
           schema:
             type: string
             format: date
+          required: true
           description: by settle_date
         - name: status
           in: query
@@ -2616,6 +2258,7 @@ paths:
             enum:
               - JNLC
               - JNLS
+          required: true
         - name: to_account
           in: query
           schema:
@@ -2632,14 +2275,14 @@ paths:
           content:
             application/json:
               schema:
+                oneOf:
+                  - $ref: '#/components/schemas/JournalJNLC'
+                  - $ref: '#/components/schemas/JournalJNLS'
                 discriminator:
                   propertyName: entry_type
                   mapping:
                     JNLC: '#/components/schemas/JournalJNLC'
                     JNLS: '#/components/schemas/JournalJNLS'
-                type: array
-                items:
-                  $ref: '#/components/schemas/JournalResource'
               example:
                 id: f45g67h8-d1fc-4136-aa4f-cf4460aecdfc
                 entry_type: JNLC
@@ -2647,7 +2290,6 @@ paths:
                 to_account: 3gtt65jd-6f2a-433c-8c33-17b66b8941fa
                 status: pending
                 net_amount: '115.5'
-      operationId: get_journals
     post:
       security:
         - BasicAuth: []
@@ -2667,7 +2309,41 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/JournalData'
+              type: object
+              properties:
+                entry_type:
+                  type: string
+                  enum:
+                    - JNLC
+                    - JNLS
+                from_account:
+                  type: string
+                  format: uuid
+                to_account:
+                  type: string
+                  format: uuid
+                amount:
+                  type: string
+                  format: decimal
+                  description: |
+                    Required for JNLC.
+                    The dollar amount to move. It has to be
+                    a positive value.
+                symbol:
+                  type: string
+                  description: |
+                    Required for JNLS.
+                qty:
+                  type: string
+                  format: decimal
+                  description: |
+                    Required for JNLS.
+                    The number of shares to move. It has to be
+                    a positive value.
+              required:
+                - entry_type
+                - from_account
+                - to_account
             example:
               entry_type: JNLC
               from_account: 8fjkjn-4483-4199-840f-6c5fe0b7ca24
@@ -2679,7 +2355,21 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/JournalResource'
+                oneOf:
+                  - $ref: '#/components/schemas/JournalJNLC'
+                  - $ref: '#/components/schemas/JournalJNLS'
+                discriminator:
+                  propertyName: entry_type
+                  mapping:
+                    JNLC: '#/components/schemas/JournalJNLC'
+                    JNLS: '#/components/schemas/JournalJNLS'
+                example:
+                  id: f45g67h8-d1fc-4136-aa4f-cf4460aecdfc
+                  entry_type: JNLC
+                  from_account: 8fjkjn-4483-4199-840f-6c5fe0b7ca24
+                  to_account: 3gtt65jd-6f2a-433c-8c33-17b66b8941fa
+                  status: pending
+                  net_amount: '115.5'
         '400':
           description: One of the parameters is invalid.
           content:
@@ -2698,7 +2388,6 @@ paths:
             application/json:
               schema:
                 type: string
-      operationId: post_journals
   '/journals/{journal_id}':
     delete:
       security:
@@ -2727,7 +2416,6 @@ paths:
         '422':
           description: |
             The journal is not in the pending status.
-      operationId: delete_journal
   '/oauth/clients/{client_id}':
     get:
       security:
@@ -2961,7 +2649,7 @@ paths:
             application/json:
               schema:
                 type: string
-  '/accounts/activities':
+  /accounts/activities:
     get:
       security:
         - BasicAuth: []
@@ -2969,38 +2657,37 @@ paths:
         - Accounts
       summary: Retrieve account activities
       parameters:
+        - name: activity_type
+          in: query
+          schema:
+            enum:
+              - FILL
+              - ACATC
+              - ACATS
+              - CSD
+              - CSR
+              - CSW
+              - DIV
+              - DIVCGL
+              - DIVCGS
+              - DIVNRA
+              - DIVROC
+              - DIVTXEX
+              - INT
+              - JNLC
+              - JNLS
+              - MA
+              - NC
+              - PTC
+              - REORG
+              - SSO
+              - SSP
+          description: The type of activity you wish to query
         - name: date
           in: query
           schema:
             type: string
         - name: until
-          in: query
-          schema:
-            type: string
-        - name: after
-          in: query
-          schema:
-            type: string
-        - name: direction
-          in: query
-          schema:
-            type: string
-            enum:
-              - asc
-              - desc
-        - name: account_id
-          in: query
-          schema:
-            type: string
-            format: uuid
-        - name: page_size
-          in: query
-          schema:
-            type: integer
-            minimum: 1
-            maximum: 100
-            default: 100
-        - name: page_token
           in: query
           schema:
             type: string
@@ -3010,9 +2697,47 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/ActivityItem'
+                type: object
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                  account_id:
+                    type: string
+                    format: uuid
+                  activity_type:
+                    enum:
+                      - FILL
+                      - ACATC
+                      - ACATS
+                      - CSD
+                      - CSR
+                      - CSW
+                      - DIV
+                      - DIVCGL
+                      - DIVCGS
+                      - DIVNRA
+                      - DIVROC
+                      - DIVTXEX
+                      - INT
+                      - JNLC
+                      - JNLS
+                      - MA
+                      - NC
+                      - PTC
+                      - REORG
+                      - SSO
+                      - SSP
+                  date:
+                    type: string
+                  net_amount:
+                    type: string
+                  description:
+                    type: string
+                  status:
+                    enum:
+                      - executed
+                      - canceled
   '/accounts/activities/{activity_type}':
     get:
       security:
@@ -3020,42 +2745,32 @@ paths:
       tags:
         - Accounts
       parameters:
-        - $ref: '#/components/parameters/ActivityType'
-        - name: date
-          in: query
+        - name: activity_type
+          in: path
+          required: true
           schema:
-            type: string
-        - name: until
-          in: query
-          schema:
-            type: string
-        - name: after
-          in: query
-          schema:
-            type: string
-        - name: direction
-          in: query
-          schema:
-            type: string
             enum:
-              - asc
-              - desc
-        - name: account_id
-          in: query
-          schema:
-            type: string
-            format: uuid
-        - name: page_size
-          in: query
-          schema:
-            type: integer
-            minimum: 1
-            maximum: 100
-            default: 100
-        - name: page_token
-          in: query
-          schema:
-            type: string
+              - FILL
+              - ACATC
+              - ACATS
+              - CSD
+              - CSR
+              - CSW
+              - DIV
+              - DIVCGL
+              - DIVCGS
+              - DIVNRA
+              - DIVROC
+              - DIVTXEX
+              - INT
+              - JNLC
+              - JNLS
+              - MA
+              - NC
+              - PTC
+              - REORG
+              - SSO
+              - SSP
       summary: Retrieve specific account activities
       responses:
         '200':
@@ -3063,9 +2778,47 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/ActivityItem'
+                type: object
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                  account_id:
+                    type: string
+                    format: uuid
+                  activity_type:
+                    enum:
+                      - FILL
+                      - ACATC
+                      - ACATS
+                      - CSD
+                      - CSR
+                      - CSW
+                      - DIV
+                      - DIVCGL
+                      - DIVCGS
+                      - DIVNRA
+                      - DIVROC
+                      - DIVTXEX
+                      - INT
+                      - JNLC
+                      - JNLS
+                      - MA
+                      - NC
+                      - PTC
+                      - REORG
+                      - SSO
+                      - SSP
+                  date:
+                    type: string
+                  net_amount:
+                    type: string
+                  description:
+                    type: string
+                  status:
+                    enum:
+                      - executed
+                      - canceled
   '/accounts/{account_id}/ach_relationships':
     parameters:
       - $ref: '#/components/parameters/AccountID'
@@ -3178,47 +2931,3 @@ paths:
       tags:
         - Accounts
         - Funding
-  /journals/batch:
-    post:
-      summary: Create a batch journal
-      operationId: post_journals_batch
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/BatchJournalResponse'
-      description: ''
-      security:
-        - BasicAuth: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/BatchJournalRequest'
-        description: ''
-      tags:
-        - Journals
-  '/trading/accounts/{account_id}/positions':
-    parameters:
-      - $ref: '#/components/parameters/AccountID'
-    get:
-      summary: List open positions for an account
-      tags:
-        - Trading
-      responses:
-        '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Position'
-      operationId: get_positions
-      security:
-        - BasicAuth: []
