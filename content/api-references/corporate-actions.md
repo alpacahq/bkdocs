@@ -65,12 +65,12 @@ query: [
 
 | Attribute  | Type        | Requirement                         | Notes                       |
 | ---------- | ----------- | ----------------------------------- | --------------------------- |
-| `ca_type`  | string      | {{<hint info>}}Required {{</hint>}} | Comma-delimited string list |
+| `ca_types` | string      | {{<hint info>}}Required {{</hint>}} | Comma-delimited string list |
 | `since`    | string/date | {{<hint info>}}Required {{</hint>}} | Format: `YYYY-MM-DD`        |
 | `until`    | string/date | {{<hint info>}}Required {{</hint>}} | Format: `YYYY-MM-DD`        |
 | `symbol`   | string      | {{<hint info>}}Optional {{</hint>}} |                             |
 | `cusip`    | string      | {{<hint info>}}Optional {{</hint>}} |                             |
-| `date_type`| strin       | {{<hint info>}}Optional {{</hint>}} |                             |
+| `date_type`| string      | {{<hint info>}}Optional {{</hint>}} |                             |
 
 ### Response
 
@@ -96,21 +96,21 @@ query: [
 
 #### Parameters
 
-| Attribute                   | Type        | Notes                                                                             |
-| --------------------------- | ----------- | --------------------------------------------------------------------------------- |
-| `ca_type`                   | string      | Corporate action announcement type                                                |
-| `ca_sub_type`               | string      | Subtype of the corporate action announcement                                      |
-| `initiating_symbol`         | string      | Optional: Symbol of the parent company (for merger, spinoff, and reorg)           |
-| `initiating_original_cusip` | string      | Optional: CUSIP of the parent company (for merger, spinoff, and reorg)            |
-| `target_symbol`             | string      | Optional: Symbol of the child company (for merger, spinoff, and reorg)            |
-| `target_original_cusip`     | string      | Optional: CUSIP of the child company (for merger, spinoff, and reorg)             |
-| `declaration_date`          | string/date | Date that the corporate action is announced                                       |
-| `expiration_date`           | string/date | The first trade date that shares are excluded from the entitlement                |
-| `record_date`               | string/date | The latest date the shares can settle to receive any entitlments                  |
-| `payable_date`              | string/date | Transaction date for the entitlements of the shareholder                          |
-| `cash`                      | int         | The amount of cash per share to be credited to the shareholder's account          |
-| `old_rate`                  | int         | Previous value of the share after the entitlement                                 |
-| `new_rate`                  | int         | Current value of the share after the entitlement                                  |
+| Attribute                   | Type          | Notes                                                                             |
+| --------------------------- | ------------- | --------------------------------------------------------------------------------- |
+| `ca_type`                   | string        | Corporate action announcement type                                                |
+| `ca_sub_type`               | string        | Subtype of the corporate action announcement                                      |
+| `initiating_symbol`         | string        | Optional: Symbol of the parent company (for merger, spinoff, and reorg)           |
+| `initiating_original_cusip` | string        | Optional: CUSIP of the parent company (for merger, spinoff, and reorg)            |
+| `target_symbol`             | string        | Optional: Symbol of the child company (for merger, spinoff, and reorg)            |
+| `target_original_cusip`     | string        | Optional: CUSIP of the child company (for merger, spinoff, and reorg)             |
+| `declaration_date`          | string/date   | Date that the corporate action is announced                                       |
+| `expiration_date`           | string/date   | The first trade date that shares are excluded from the entitlement                |
+| `record_date`               | string/date   | The latest date the shares can settle to receive any entitlments                  |
+| `payable_date`              | string/date   | Transaction date for the entitlements of the shareholder                          |
+| `cash`                      | string/number | The amount of cash per share to be credited to the shareholder's account          |
+| `old_rate`                  | string/number | Previous value of the share after the entitlement                                 |
+| `new_rate`                  | string/number | Current value of the share after the entitlement                                  |
 
 ### Constraints
 
