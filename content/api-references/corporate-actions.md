@@ -22,8 +22,8 @@ This API endpoint offers the ability to retrieve historical corporate action ann
 ``` json
 [
   {
-   "ca_type": "Dividend",
-    "ca_sub_type": "DIV",
+    "ca_type": "Dividend",
+    "ca_sub_type": "Dividend",
     "initiating_symbol": "MLLAX",
     "initiating_original_cusip": "55275E101",
     "target_symbol": "MLLAX",
@@ -71,6 +71,20 @@ This API endpoint offers the ability to retrieve historical corporate action ann
 | `cash`                      | string/number | The amount of cash per share to be credited to the shareholder's account          |
 | `old_rate`                  | string/number | Previous value of the share after the entitlement                                 |
 | `new_rate`                  | string/number | Current value of the share after the entitlement                                  |
+
+
+###  Announcement Types and Subtypes
+
+| ca_type          | ca_sub_type          |
+| ---------------- | -------------------- |
+| Dividend         | Dividend             |
+| Merger           | Merger               |
+| Merger           | Merger Completion    |
+| Spinoff          | Spinoff              |
+| Split            | Recapitalize         |
+| Split            | Reverse Stock Split  |
+| Split            | Stock Split          |
+| Split            | Unit Split           |
 
 ---
 
@@ -131,13 +145,13 @@ In order to preserve the integrity of Alpaca’s database performance for all us
 {{</hint>}}
 
 {{<hint warning>}}
-422 - Bad Request
+422 - Unprocessable Entity
 
-​ _Invalid input value._
+​ _The request body contains an attribute that is not permitted._
 {{</hint>}}
 
 {{<hint warning>}}
 500 - Internal Server Error
 
-​ _Some server error occurred. Please contact Alpaca_
+​ _Some server error occurred. Please contact Alpaca._
 {{</hint>}}
