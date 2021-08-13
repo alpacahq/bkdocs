@@ -37,7 +37,7 @@ This API endpoint offers the ability to retrieve historical corporate action ann
     "new_rate": "1"
   },
   {
-   "ca_type": "Merger",
+    "ca_type": "Merger",
     "ca_sub_type": "Merger Completion",
     "initiating_symbol": "CRM",
     "initiating_original_cusip": "79466L302",
@@ -88,26 +88,13 @@ This API endpoint offers the ability to retrieve historical corporate action ann
 
 ---
 
-## **Retrieving Corporate Action Announcements**
+## **Retrieving Announcements**
 
 `GET /v1/corporate_actions/announcements`
 
 ### Request
 
-#### Sample Request
-
-```json
-{
-  "since": "2021-01-01",
-  "until": "2021-01-31",
-  "ca_types": "Dividend,Merger",
-  "date_type": "payable_date",
-  "symbol": null,
-  "cusip": null
-}
-```
-
-#### Parameters
+#### Query Parameters
 
 | Attribute  | Type             | Requirement                         | Notes                                                                |
 | ---------- | ---------------- | ----------------------------------- | -------------------------------------------------------------------- |
@@ -124,13 +111,11 @@ An array of announcement objects.
 
 ---
 
-## **Constraints and Error Codes**
+#### Constraints
 
-### Constraints
+In order to preserve the integrity of Alpaca’s database performance for all users, the ca_type, since, and until fields are required. Please note that it is acceptable to pass in all five corporate action types in the form a list of strings. Additionally, the limit on the length of the date range interval is 90 day intervals per API call, however, you may make multiple calls of 90 day blocks should the need arise to capture corporate action announcements over a longer time frame.
 
-In order to preserve the integrity of Alpaca’s database performance for all users, the ca_type, since, and until fields are required. Please note that it is acceptable to pass in all five corporate action types in the form a list of strings. Additionally, the limit on the length of the date range interval is 90 day intervals per API call, however, you may make multiple calls of 90 day blocks should the need arise to capture corporate action announcements over a longer time frame. Should an invalid date range be passed that breaks these limitations, the following error message will occur.
-
-### Error Codes
+#### Error Codes
 
 {{<hint warning>}}
 400 - Bad Request
