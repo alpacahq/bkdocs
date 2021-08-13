@@ -37,7 +37,7 @@ This API endpoint offers the ability to retrieve historical corporate action ann
     "new_rate": "1"
   },
   {
-   "ca_type": "Merger",
+    "ca_type": "Merger",
     "ca_sub_type": "Merger Completion",
     "initiating_symbol": "CRM",
     "initiating_original_cusip": "79466L302",
@@ -94,20 +94,7 @@ This API endpoint offers the ability to retrieve historical corporate action ann
 
 ### Request
 
-#### Sample Request
-
-```json
-{
-  "since": "2021-01-01",
-  "until": "2021-01-31",
-  "ca_types": "Dividend,Merger",
-  "date_type": "payable_date",
-  "symbol": null,
-  "cusip": null
-}
-```
-
-#### Parameters
+#### Query Parameters
 
 | Attribute  | Type             | Requirement                         | Notes                                                                |
 | ---------- | ---------------- | ----------------------------------- | -------------------------------------------------------------------- |
