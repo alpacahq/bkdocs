@@ -15,88 +15,48 @@ This API endpoint offers the ability to retrieve historical corporate action ann
   - Reverse Split: a subtype of a standard stock split in which a company is merging multiple stocks into one
 
 ---
+## **The Announcement Object**
 
-## **Announcements**
+### Sample Object
 
-`GET /v1/corporate_actions/announcements`
-
-### Request
-
-#### Sample Request
-
-```
-path: [
-	"v1",
-	"corporate_actions",
-	"announcements"
-],
-query: [
-	{
-		"key": "since",
-		"value": "2021-01-01"
-	},
-	{
-		"key": "until",
-		"value": "2021-01-31"
-	},
-	{
-		"key": "ca_types",
-		"value": "Dividend,Split"
-	},
-	{
-		"key": "date_type",
-		"value": "payable_date",
-		"disabled": true
-	},
-	{
-		"key": "symbol",
-		"value": null,
-		"disabled": true
-	},
-	{
-		"key": "cusip",
-		"value": null,
-		"disabled": true
-	}
+``` json
+[
+  {
+   "ca_type": "Dividend",
+    "ca_sub_type": "DIV",
+    "initiating_symbol": "MLLAX",
+    "initiating_original_cusip": "55275E101",
+    "target_symbol": "MLLAX",
+    "target_original_cusip": "55275E101",
+    "declaration_date": "2021-01-05",
+    "expiration_date": "2021-01-12",
+    "record_date": "2021-01-13",
+    "payable_date": "2021-01-14",
+    "cash": "0.018",
+    "old_rate": "1",
+    "new_rate": "1"
+  },
+  {
+   "ca_type": "Merger",
+    "ca_sub_type": "Merger Completion",
+    "initiating_symbol": "CRM",
+    "initiating_original_cusip": "79466L302",
+    "target_symbol": "WORK",
+    "target_original_cusip": "83088V102",
+    "declaration_date": "2021-07-21",
+    "expiration_date": "2021-07-21",
+    "record_date": "2021-07-21",
+    "payable_date": "2021-07-21",
+    "cash": "26,79",
+    "old_rate": "1",
+    "new_rate": "0.078"
+  }
 ]
 ```
 
-#### Parameters
+### Attributes
 
-| Attribute  | Type        | Requirement                         | Notes                       |
-| ---------- | ----------- | ----------------------------------- | --------------------------- |
-| `ca_types` | string      | {{<hint info>}}Required {{</hint>}} | Comma-delimited string list |
-| `since`    | string/date | {{<hint info>}}Required {{</hint>}} | Format: `YYYY-MM-DD`        |
-| `until`    | string/date | {{<hint info>}}Required {{</hint>}} | Format: `YYYY-MM-DD`        |
-| `symbol`   | string      | {{<hint info>}}Optional {{</hint>}} |                             |
-| `cusip`    | string      | {{<hint info>}}Optional {{</hint>}} |                             |
-| `date_type`| string      | {{<hint info>}}Optional {{</hint>}} |                             |
-
-### Response
-
-#### Sample Response
-
-```
-{
-  "ca_type": "Dividend",
-  "ca_sub_type": "DIV",
-  "initiating_symbol": "MLLAX",
-  "initiating_original_cusip": "55275E101",
-  "target_symbol": "MLLAX",
-  "target_original_cusip": "55275E101",
-  "declaration_date": "2021-01-05",
-  "expiration_date": "2021-01-12",
-  "record_date": "2021-01-13",
-  "payable_date": "2021-01-14",
-  "cash": "0.018",
-  "old_rate": "1",
-  "new_rate": "1"
-}
-```
-
-#### Parameters
-
-| Attribute                   | Type          | Notes                                                                             |
+| Attribute                   | Type          | Description                                                                       |
 | --------------------------- | ------------- | --------------------------------------------------------------------------------- |
 | `ca_type`                   | string        | Corporate action announcement type                                                |
 | `ca_sub_type`               | string        | Subtype of the corporate action announcement                                      |
@@ -112,14 +72,72 @@ query: [
 | `old_rate`                  | string/number | Previous value of the share after the entitlement                                 |
 | `new_rate`                  | string/number | Current value of the share after the entitlement                                  |
 
+---
+
+## **Retrieving Corporate Action Announcements**
+
+`GET /v1/corporate_actions/announcements`
+
+### Request
+
+#### Sample Request
+
+```json
+{
+  "since": "2021-01-01",
+  "until": "2021-01-31",
+  "ca_types": "Dividend,Merger",
+  "date_type": "payable_date",
+  "symbol": null,
+  "cusip": null
+}
+```
+
+#### Parameters
+
+| Attribute  | Type             | Requirement                         | Notes                                                                |
+| ---------- | ---------------- | ----------------------------------- | -------------------------------------------------------------------- |
+| `ca_types` | string           | {{<hint info>}}Required {{</hint>}} | Comma-delimited string list                                          |
+| `since`    | string/timestamp | {{<hint info>}}Required {{</hint>}} | The first date to retrieve data for (inclusive) in YYYY-MM-DD format |
+| `until`    | string/timestamp | {{<hint info>}}Required {{</hint>}} | The last date to retrieve data for (inclusive) in YYYY-MM-DD format  |
+| `symbol`   | string           | {{<hint info>}}Optional {{</hint>}} |                                                                      |
+| `cusip`    | string           | {{<hint info>}}Optional {{</hint>}} |                                                                      |
+| `date_type`| string           | {{<hint info>}}Optional {{</hint>}} |                                                                      |
+
+### Response
+
+An array of announcement objects.
+
+---
+
+## **Constraints and Error Codes**
+
 ### Constraints
 
 In order to preserve the integrity of Alpaca’s database performance for all users, the ca_type, since, and until fields are required. Please note that it is acceptable to pass in all five corporate action types in the form a list of strings. Additionally, the limit on the length of the date range interval is 90 day intervals per API call, however, you may make multiple calls of 90 day blocks should the need arise to capture corporate action announcements over a longer time frame. Should an invalid date range be passed that breaks these limitations, the following error message will occur.
 
-```
-{
-    "code": 40010001,
-    "message": "invalid param: since & until cannot be more than 90 days apart"
-}
-```
+### Error Codes
 
+{{<hint warning>}}
+400 - Bad Request
+
+​ _The body in the request is not valid._
+{{</hint>}}
+
+{{<hint warning>}}
+401 - Authorization
+
+​ _Request is not authorized._
+{{</hint>}}
+
+{{<hint warning>}}
+422 - Bad Request
+
+​ _Invalid input value._
+{{</hint>}}
+
+{{<hint warning>}}
+500 - Internal Server Error
+
+​ _Some server error occurred. Please contact Alpaca_
+{{</hint>}}
