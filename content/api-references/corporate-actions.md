@@ -56,24 +56,24 @@ This API endpoint offers the ability to retrieve historical corporate action ann
 
 ### Attributes
 
-| Attribute                   | Type          | Description                                                                       |
-| --------------------------- | ------------- | --------------------------------------------------------------------------------- |
-| `ca_type`                   | string        | Corporate action announcement type                                                |
-| `ca_sub_type`               | string        | Subtype of the corporate action announcement                                      |
-| `initiating_symbol`         | string        | Optional: Symbol of the parent company (for merger, spinoff, and reorg)           |
-| `initiating_original_cusip` | string        | Optional: CUSIP of the parent company (for merger, spinoff, and reorg)            |
-| `target_symbol`             | string        | Optional: Symbol of the child company (for merger, spinoff, and reorg)            |
-| `target_original_cusip`     | string        | Optional: CUSIP of the child company (for merger, spinoff, and reorg)             |
-| `declaration_date`          | string/date   | Date that the corporate action is announced                                       |
-| `expiration_date`           | string/date   | The first trade date that shares are excluded from the entitlement                |
-| `record_date`               | string/date   | The latest date the shares can settle to receive any entitlments                  |
-| `payable_date`              | string/date   | Transaction date for the entitlements of the shareholder                          |
-| `cash`                      | string/number | The amount of cash per share to be credited to the shareholder's account          |
-| `old_rate`                  | string/number | Previous value of the share after the entitlement                                 |
-| `new_rate`                  | string/number | Current value of the share after the entitlement                                  |
+| Attribute                            | Type          | Description                                                                       |
+| ------------------------------------ | ------------- | --------------------------------------------------------------------------------- |
+| [ca_type] | string        | Corporate action announcement type                                                |
+| `ca_sub_type`                        | string        | Subtype of the corporate action announcement                                      |
+| `initiating_symbol`                  | string        | Nullable: Symbol of the parent company (for merger, spinoff, and reorg)           |
+| `initiating_original_cusip`          | string        | Nullable: CUSIP of the parent company (for merger, spinoff, and reorg)            |
+| `target_symbol`                      | string        | Nullable: Symbol of the child company (for merger, spinoff, and reorg)            |
+| `target_original_cusip`              | string        | Nullable: CUSIP of the child company (for merger, spinoff, and reorg)             |
+| `declaration_date`                   | string/date   | Date that the corporate action is announced                                       |
+| `expiration_date`                    | string/date   | The first trade date that shares are excluded from the entitlement                |
+| `record_date`                        | string/date   | The latest date the shares can settle to receive any entitlments                  |
+| `payable_date`                       | string/date   | Transaction date for the entitlements of the shareholder                          |
+| `cash`                               | string/number | The amount of cash per share to be credited to the shareholder's account          |
+| `old_rate`                           | string/number | Previous value of the share after the entitlement                                 |
+| `new_rate`                           | string/number | Current value of the share after the entitlement                                  |
 
 
-###  Announcement Types and Subtypes
+###  Announcement Type Pairings
 
 | ca_type          | ca_sub_type          |
 | ---------------- | -------------------- |
@@ -96,24 +96,18 @@ This API endpoint offers the ability to retrieve historical corporate action ann
 
 #### Query Parameters
 
-| Attribute  | Type             | Requirement                         | Notes                                                                |
-| ---------- | ---------------- | ----------------------------------- | -------------------------------------------------------------------- |
-| `ca_types` | string           | {{<hint info>}}Required {{</hint>}} | Comma-delimited string list                                          |
-| `since`    | string/timestamp | {{<hint info>}}Required {{</hint>}} | The first date to retrieve data for (inclusive) in YYYY-MM-DD format |
-| `until`    | string/timestamp | {{<hint info>}}Required {{</hint>}} | The last date to retrieve data for (inclusive) in YYYY-MM-DD format  |
-| `symbol`   | string           | {{<hint info>}}Optional {{</hint>}} |                                                                      |
-| `cusip`    | string           | {{<hint info>}}Optional {{</hint>}} |                                                                      |
-| `date_type`| string           | {{<hint info>}}Optional {{</hint>}} |                                                                      |
+| Attribute  | Type                        | Requirement                         | Notes                                                               |
+| ---------- | --------------------------- | ----------------------------------- | ------------------------------------------------------------------- |
+| `ca_types`                               | string           | {{<hint info>}}Required {{</hint>}} | Comma-delimited string list of [ca_types]({{< relref "#announcement-type-pairings" >}})         |
+| `since`                                  | string/timestamp | {{<hint info>}}Required {{</hint>}} | The start date (inclusive) of the specified date range (90 days max) in YYYY-MM-DD format             |
+| `until`                                  | string/timestamp | {{<hint info>}}Required {{</hint>}} | The end date (inclusive) of the specified date range (90 days max) in YYYY-MM-DD format                  |
+| `symbol`                                 | string           | {{<hint info>}}Optional {{</hint>}} |                                                  |
+| `cusip`                                  | string           | {{<hint info>}}Optional {{</hint>}} |                                                  |
+| [date_type]({{< relref "#date-type" >}}) | string           | {{<hint info>}}Optional {{</hint>}} | Can pass one of the following:declaration_date, expiration_date, record_date, payable_date |
 
 ### Response
 
-An array of announcement objects.
-
----
-
-#### Constraints
-
-In order to preserve the integrity of Alpaca’s database performance for all users, the ca_type, since, and until fields are required. Please note that it is acceptable to pass in all five corporate action types in the form a list of strings. Additionally, the limit on the length of the date range interval is 90 day intervals per API call, however, you may make multiple calls of 90 day blocks should the need arise to capture corporate action announcements over a longer time frame.
+An array of [announcement]({{< relref "#the-announcement-object" >}}) objects.
 
 #### Error Codes
 
