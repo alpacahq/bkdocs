@@ -96,14 +96,14 @@ This API endpoint offers the ability to retrieve historical corporate action ann
 
 #### Query Parameters
 
-| Attribute  | Type                        | Requirement                         | Notes                                                               |
-| ---------- | --------------------------- | ----------------------------------- | ------------------------------------------------------------------- |
-| `ca_types`                               | string           | {{<hint info>}}Required {{</hint>}} | Comma-delimited string list of [ca_types]({{< relref "#announcement-type-pairings" >}})         |
-| `since`                                  | string/timestamp | {{<hint info>}}Required {{</hint>}} | The start date (inclusive) of the specified date range (90 days max) in YYYY-MM-DD format             |
-| `until`                                  | string/timestamp | {{<hint info>}}Required {{</hint>}} | The end date (inclusive) of the specified date range (90 days max) in YYYY-MM-DD format                  |
-| `symbol`                                 | string           | {{<hint info>}}Optional {{</hint>}} |                                                  |
-| `cusip`                                  | string           | {{<hint info>}}Optional {{</hint>}} |                                                  |
-| [date_type]({{< relref "#date-type" >}}) | string           | {{<hint info>}}Optional {{</hint>}} | Can pass one of the following:declaration_date, expiration_date, record_date, payable_date |
+| Attribute  | Type             | Requirement                         | Notes                                                                                      |
+| ---------- | ---------------- | ----------------------------------- | ------------------------------------------------------------------------------------------ |
+| `ca_types` | string           | {{<hint info>}}Required {{</hint>}} | Comma-delimited string list of [ca_types]({{< relref "#announcement-type-pairings" >}})    |
+| `since`    | string/timestamp | {{<hint info>}}Required {{</hint>}} | The start date (inclusive) of the specified date range (90 days max) in YYYY-MM-DD format  |
+| `until`    | string/timestamp | {{<hint info>}}Required {{</hint>}} | The end date (inclusive) of the specified date range (90 days max) in YYYY-MM-DD format    |
+| `symbol`   | string           | {{<hint info>}}Optional {{</hint>}} |                                                                                            |
+| `cusip`    | string           | {{<hint info>}}Optional {{</hint>}} |                                                                                            |
+| `date_type`| string           | {{<hint info>}}Optional {{</hint>}} | Can pass one of the following:declaration_date, expiration_date, record_date, payable_date |
 
 ### Response
 
