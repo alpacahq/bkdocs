@@ -58,7 +58,7 @@ This API endpoint offers the ability to retrieve historical corporate action ann
 
 | Attribute                            | Type          | Description                                                                       |
 | ------------------------------------ | ------------- | --------------------------------------------------------------------------------- |
-| [ca_type] | string        | Corporate action announcement type                                                |
+| `ca_type` | string        | Corporate action announcement type                                                |
 | `ca_sub_type`                        | string        | Subtype of the corporate action announcement                                      |
 | `initiating_symbol`                  | string        | Nullable: Symbol of the parent company (for merger, spinoff, and reorg)           |
 | `initiating_original_cusip`          | string        | Nullable: CUSIP of the parent company (for merger, spinoff, and reorg)            |
