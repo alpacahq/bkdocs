@@ -29,7 +29,7 @@ This API endpoint offers the ability to retrieve historical corporate action ann
     "target_symbol": "MLLAX",
     "target_original_cusip": "55275E101",
     "declaration_date": "2021-01-05",
-    "expiration_date": "2021-01-12",
+    "ex_date": "2021-01-12",
     "record_date": "2021-01-13",
     "payable_date": "2021-01-14",
     "cash": "0.018",
@@ -44,7 +44,7 @@ This API endpoint offers the ability to retrieve historical corporate action ann
     "target_symbol": "WORK",
     "target_original_cusip": "83088V102",
     "declaration_date": "2021-07-21",
-    "expiration_date": "2021-07-21",
+    "ex_date": "2021-07-21",
     "record_date": "2021-07-21",
     "payable_date": "2021-07-21",
     "cash": "26,79",
@@ -58,14 +58,14 @@ This API endpoint offers the ability to retrieve historical corporate action ann
 
 | Attribute                            | Type          | Description                                                                       |
 | ------------------------------------ | ------------- | --------------------------------------------------------------------------------- |
-| [ca_type] | string        | Corporate action announcement type                                                |
+| `ca_type` | string        | Corporate action announcement type                                                |
 | `ca_sub_type`                        | string        | Subtype of the corporate action announcement                                      |
 | `initiating_symbol`                  | string        | Nullable: Symbol of the parent company (for merger, spinoff, and reorg)           |
 | `initiating_original_cusip`          | string        | Nullable: CUSIP of the parent company (for merger, spinoff, and reorg)            |
 | `target_symbol`                      | string        | Nullable: Symbol of the child company (for merger, spinoff, and reorg)            |
 | `target_original_cusip`              | string        | Nullable: CUSIP of the child company (for merger, spinoff, and reorg)             |
 | `declaration_date`                   | string/date   | Date that the corporate action is announced                                       |
-| `expiration_date`                    | string/date   | The first trade date that shares are excluded from the entitlement                |
+| `ex_date`                            | string/date   | The first trade date that shares are excluded from the entitlement                |
 | `record_date`                        | string/date   | The latest date the shares can settle to receive any entitlments                  |
 | `payable_date`                       | string/date   | Transaction date for the entitlements of the shareholder                          |
 | `cash`                               | string/number | The amount of cash per share to be credited to the shareholder's account          |
@@ -103,7 +103,7 @@ This API endpoint offers the ability to retrieve historical corporate action ann
 | `until`    | string/timestamp | {{<hint info>}}Required {{</hint>}} | The end date (inclusive) of the specified date range (90 days max) in YYYY-MM-DD format    |
 | `symbol`   | string           | {{<hint info>}}Optional {{</hint>}} |                                                                                            |
 | `cusip`    | string           | {{<hint info>}}Optional {{</hint>}} |                                                                                            |
-| `date_type`| string           | {{<hint info>}}Optional {{</hint>}} | Can pass one of the following:declaration_date, expiration_date, record_date, payable_date |
+| `date_type`| string           | {{<hint info>}}Optional {{</hint>}} | Can pass one of the following:declaration_date, ex_date, record_date, payable_date |
 
 ### Response
 
