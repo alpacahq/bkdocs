@@ -25,4 +25,4 @@ The screenshots below demonstrate how a native user would walk through Ribbit to
 ## Technology
 The user interface is written in Swift for iOS and Java for Android. The backend is implemented using Go. 
 ### Alpaca APIs
-All of the technology that is needed for users to interact with Ribbit's core functionality is acheived through the Broker API. Accessing information related to the market is gathered using the [Market Data API](http://localhost:1313/docs/broker/market-data/). 
+All of the technology that is needed for users to interact with Ribbit's core functionality is acheived through the Broker API. Accessing information related to the market is gathered using the [Market Data API](https://alpaca.markets/docs/broker/market-data/). 
