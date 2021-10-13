@@ -14,13 +14,13 @@ Ribbit is a mobile app designed to showcase the capabilities of the Broker API. 
 The screenshots below demonstrate how a native user would walk through Ribbit to accomplish various tasks. 
 
 ### **Create a New Account**
-![image](./demo_screenshots/Ribbit_Onboarding.png)
+![image](./demo_images/Ribbit_Onboarding.png)
 
 ### **Fund Your Account**
-![image](./demo_screenshots/Ribbit_Funding.png)
+![image](./demo_images/Ribbit_Funding.png)
 
 ### **View Stocks and Execute Trades**
-![image](./demo_screenshots/Ribbit_Market_Data.png)
+![image](./demo_images/Ribbit_Market_Data.png)
 
 ## Technology
 The user interface is written in Swift for iOS and Java for Android. The backend is implemented using Go. 
