@@ -55,7 +55,9 @@ No request parameters
 }
 ```
 
-### Attributes
+### Response
+
+##### Parameters
 
 | Attribute                | Type      | Notes             |
 | ------------------------ | --------- | ----------------- |
