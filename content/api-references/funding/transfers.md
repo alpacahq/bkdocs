@@ -59,6 +59,7 @@ Transfers allow you to transfer money/balance into your end customers' account (
 | Attribute  | Description                                   |
 | ---------- | --------------------------------------------- |
 | `QUEUED`   | Transfer is in queue to be processed          |
+| `APPROVAL_PENDING` | Transfer is pending approval          |
 | `PENDING`  | Transfer is pending processing                |
 | `REJECTED` | Transfer is rejected                          |
 | `APPROVED` | Transfer is approved                          |
