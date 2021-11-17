@@ -129,6 +129,7 @@ The following result codes may return for a CIP check.
 - `DATE_OF_BIRTH`: date of birth needs to be verified
 - `PEP`: further information needs to be submitted if account is politically exposed person
 - `FAMILY_MEMBER_PEP`: further information needs to be submitted if family member is a politically exposed person
+- `WATCHLIST_HIT`: identity needs further review
 - `CONTROL_PERSON`
 - `AFFILIATED`
 - `OTHER`
@@ -143,6 +144,7 @@ The table below shows the documents required to appeal the various CIP rejection
 | `TAX_IDENTIFICATION`    | -                                     | {{<hint danger>}}Required {{</hint>}} | -                                   |
 | `ADDRESS_VERIFICATION`  | {{<hint danger>}}Required {{</hint>}} | -                                     | {{<hint info>}}Optional {{</hint>}} |
 | `DATE_OF_BIRTH`         | {{<hint danger>}}Required {{</hint>}} | -                                     | -                                   |
+| `WATCHLIST_HIT`         | {{<hint danger>}}Required {{</hint>}} | -                                     | -                                   |
 
 The table below shows the additional information required to appeal the various CIP rejection reasons:
 
