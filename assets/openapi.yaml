@@ -1843,6 +1843,32 @@ components:
         - status_to
         - reason
         - at
+    TradeUpdatesEvent:
+      description: ''
+      type: object
+      title: TradeUpdatesEvent
+      properties:
+        account_id:
+          type: string
+          minLength: 1
+        at:
+          type: string
+          minLength: 1
+        event:
+          type: string
+        event_id:
+          type: integer
+        execution_id:
+          type: integer
+        order:
+          $ref: '#/components/schemas/Order'
+      required:
+        - account_id
+        - at
+        - event
+        - event_id
+        - execution_id
+        - order
     Watchlist:
       title: Watchlist
       type: object
@@ -1864,7 +1890,7 @@ components:
         updated_at:
           type: string
           format: date-time
-        '':
+        name:
           type: string
           pattern: '^[a-zA-Z0-9]+$'
         assets:
@@ -2983,6 +3009,49 @@ paths:
               schema:
                 $ref: '#/components/schemas/AccountStatusEvent'
               examples: {}
+  /events/trades:
+    get:
+      security:
+        - BasicAuth: [ ]
+      summary: Subscribe to events related to trade updates (SSE).
+      tags:
+        - Trading
+        - Events
+      description: |
+        Query Params Rules:
+        - `since` required if `until` specified
+        - `since_id` required if `until_id` specified
+        - `since` and `since_id` can’t be used at the same time
+        Behavior:
+        - if `since` or `since_id` not specified this will not return any historic data
+        - if `until` or `until_id` reached stream will end (status 200)
+      parameters:
+        - name: since
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: until
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: since_id
+          in: query
+          schema:
+            type: integer
+        - name: until_id
+          in: query
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Connected.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TradeUpdatesEvent'
+              examples: { }
   /events/journals/status:
     get:
       security:
