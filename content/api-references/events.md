@@ -130,6 +130,7 @@ The following result codes may return for a CIP check.
 - `PEP`: further information needs to be submitted if account is politically exposed person
 - `FAMILY_MEMBER_PEP`: further information needs to be submitted if family member is a politically exposed person
 - `WATCHLIST_HIT`: identity needs further review
+- `COUNTRY_NOT_SUPPORTED`: account's country is not supported by the current KYCaaS coverage
 - `CONTROL_PERSON`
 - `AFFILIATED`
 - `OTHER`
