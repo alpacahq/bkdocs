@@ -145,7 +145,6 @@ The table below shows the documents required to appeal the various CIP rejection
 | `TAX_IDENTIFICATION`    | -                                     | {{<hint danger>}}Required {{</hint>}} | -                                   |
 | `ADDRESS_VERIFICATION`  | {{<hint danger>}}Required {{</hint>}} | -                                     | {{<hint info>}}Optional {{</hint>}} |
 | `DATE_OF_BIRTH`         | {{<hint danger>}}Required {{</hint>}} | -                                     | -                                   |
-| `WATCHLIST_HIT`         | {{<hint danger>}}Required {{</hint>}} | -                                     | -                                   |
 
 The table below shows the additional information required to appeal the various CIP rejection reasons:
 
