@@ -73,12 +73,12 @@ The Accounts API allows you to create and manage the accounts under your brokera
     {
       "document_type": "identity_verification",
       "document_sub_type": "passport",
-      "content": "QWxwYWNhcyBjYW5ub3QgbGl2ZSBhbG9uZS4=",
+      "content": "/9j/Cg==",
       "mime_type": "image/jpeg"
     },
     {
       "document_type": "w8ben",
-      "content": "RFerjiUxFUTXLQ7pMEckpWYjLPviLRZdrc4=",
+      "content": "JVBERi0K",
       "mime_type": "application/pdf"
     }
   ],
@@ -115,28 +115,28 @@ The Accounts API allows you to create and manage the accounts under your brokera
 
 **Identity**
 
-| Attribute                  | Type                                                            |
-| -------------------------- | --------------------------------------------------------------- |
-| `given_name`               | string                                                          |
-| `family_name`              | string                                                          |
-| `date_of_birth`            | date                                                            |
-| `tax_id`                   | string                                                          |
-| `tax_id_type`              | [ENUM.TaxIdType]({{< relref "#tax-id-type" >}})                 |
-| `country_of_citizenship`   | string                                                          |
-| `country_of_birth`         | string                                                          |
-| `country_of_tax_residence` | string                                                          |
-| `visa_type`                | [ENUM.VisaType]({{< relref "#visa-type" >}})                    |
-| `visa_expiration_date`     | date                                                            |
-| `date_of_departure_from_usa` | date                                                          |
-| `permanent_resident`       | boolean                                                         |
-| `funding_source`           | array of [ENUM.FundingSource]({{< relref "#funding-source" >}}) |
-| `annual_income_min`        | string/number                                                   |
-| `annual_income_max`        | string/number                                                   |
-| `liquid_net_worth_min`     | string/number                                                   |
-| `liquid_net_worth_max`     | string/number                                                   |
-| `total_net_worth_min`      | string/number                                                   |
-| `total_net_worth_max`      | string/number                                                   |
-| `extra`                    | object                                                          |
+| Attribute                    | Type                                                            |
+| ---------------------------- | --------------------------------------------------------------- |
+| `given_name`                 | string                                                          |
+| `family_name`                | string                                                          |
+| `date_of_birth`              | date                                                            |
+| `tax_id`                     | string                                                          |
+| `tax_id_type`                | [ENUM.TaxIdType]({{< relref "#tax-id-type" >}})                 |
+| `country_of_citizenship`     | string                                                          |
+| `country_of_birth`           | string                                                          |
+| `country_of_tax_residence`   | string                                                          |
+| `visa_type`                  | [ENUM.VisaType]({{< relref "#visa-type" >}})                    |
+| `visa_expiration_date`       | date                                                            |
+| `date_of_departure_from_usa` | date                                                            |
+| `permanent_resident`         | boolean                                                         |
+| `funding_source`             | array of [ENUM.FundingSource]({{< relref "#funding-source" >}}) |
+| `annual_income_min`          | string/number                                                   |
+| `annual_income_max`          | string/number                                                   |
+| `liquid_net_worth_min`       | string/number                                                   |
+| `liquid_net_worth_max`       | string/number                                                   |
+| `total_net_worth_min`        | string/number                                                   |
+| `total_net_worth_max`        | string/number                                                   |
+| `extra`                      | object                                                          |
 
 **Disclosures**
 
@@ -269,7 +269,8 @@ In addition, only one of the following is **required**,
 | `family`            | Family            |
 
 #### Visa Type
-In addition to the following USA visa categories, we accept any sub visas of the list below. Sub visas must be passed in according to their parent category. Note that United States green card holders are considered permanent residents and should not pass in a visa type. 
+
+In addition to the following USA visa categories, we accept any sub visas of the list below. Sub visas must be passed in according to their parent category. Note that United States green card holders are considered permanent residents and should not pass in a visa type.
 
 | Attribute | Description                 |
 | --------- | --------------------------- |
@@ -287,7 +288,6 @@ In addition to the following USA visa categories, we accept any sub visas of the
 | `Other`   | Any other USA Visa Category |
 | `O1`      | USA Visa Category O-1       |
 | `TN1`     | USA Visa Category TN-1      |
-
 
 #### Employment Status
 
@@ -350,7 +350,7 @@ Accounts API supports fixtures in Sandbox Environment. You can pass the desired 
 
 #### Sample Fixture
 
-Simulating a rejected account. 
+Simulating a rejected account.
 
 ```json
 {
@@ -441,7 +441,7 @@ Submit an account application with KYC information. This will create a trading a
 | `contact`         | {{<hint danger>}}Required {{</hint>}} |
 | `identity`        | {{<hint danger>}}Required {{</hint>}} |
 | `disclosures`     | {{<hint danger>}}Required {{</hint>}} |
-| `documents`       | {{<hint info>}}Optional {{</hint>}} |
+| `documents`       | {{<hint info>}}Optional {{</hint>}}   |
 | `trusted_contact` | {{<hint info>}}Optional {{</hint>}}   |
 
 **Contact**
@@ -457,28 +457,28 @@ Submit an account application with KYC information. This will create a trading a
 
 **Identity**
 
-| Attribute                  | Type                                                   | Requirement                           | Notes                                            |
-| -------------------------- | ------------------------------------------------------ | ------------------------------------- | ------------------------------------------------ |
-| `given_name`               | string                                                 | {{<hint danger>}}Required {{</hint>}} |                                                  |
-| `family_name`              | string                                                 | {{<hint danger>}}Required {{</hint>}} |                                                  |
-| `date_of_birth`            | date                                                   | {{<hint danger>}}Required {{</hint>}} |                                                  |
-| `tax_id`                   | string                                                 | {{<hint info>}}Optional {{</hint>}}   | Required if `tax_id_type` is set.                |
-| `tax_id_type`              | [ENUM.TaxIdType]({{< relref "#tax-id-type" >}})        | {{<hint info>}}Optional {{</hint>}}   | Required if `tax_id` is set.                     |
-| `country_of_citizenship`   | string                                                 | {{<hint info>}}Optional {{</hint>}}   | 3 letter country code acceptable                 |
-| `country_of_birth`         | string                                                 | {{<hint info>}}Optional {{</hint>}}   | 3 letter country code acceptable                 |
-| `country_of_tax_residency` | string                                                 | {{<hint danger>}}Required {{</hint>}} | 3 letter country code acceptable                 |
-| `visa_type`                | [ENUM.VisaType]({{< relref "#visa-type" >}})           | {{<hint info>}}Optional {{</hint>}}   | Only used to collect visa types for users residing in the USA. |
-| `visa_expiration_date`     | date                                                   | {{<hint info>}}Optional {{</hint>}}   | Required if `visa_type` is set.                  |
-| `date_of_departure_from_usa` | date                                                 | {{<hint info>}}Optional {{</hint>}}   | Required if `visa_type` = `B1` or `B2`           |
-| `permanent_resident`       | boolean                                                | {{<hint info>}}Optional {{</hint>}}   | Only used to collect permanent residence status in the USA. |
-| `funding_source`           | [ENUM.FundingSource]({{< relref "#funding-source" >}}) | {{<hint danger>}}Required {{</hint>}} |                                                  |
-| `annual_income_min`        | string/number                                          | {{<hint info>}}Optional {{</hint>}}   |                                                  |
-| `annual_income_max`        | string/number                                          | {{<hint info>}}Optional {{</hint>}}   |                                                  |
-| `liquid_net_worth_min`     | string/number                                          | {{<hint info>}}Optional {{</hint>}}   |                                                  |
-| `liquid_net_worth_max`     | string/number                                          | {{<hint info>}}Optional {{</hint>}}   |                                                  |
-| `total_net_worth_min`      | string/number                                          | {{<hint info>}}Optional {{</hint>}}   |                                                  |
-| `total_net_worth_max`      | string/number                                          | {{<hint info>}}Optional {{</hint>}}   |                                                  |
-| `extra`                    | object                                                 | {{<hint info>}}Optional {{</hint>}}   | Any additional information used for KYC purposes |
+| Attribute                    | Type                                                   | Requirement                           | Notes                                                          |
+| ---------------------------- | ------------------------------------------------------ | ------------------------------------- | -------------------------------------------------------------- |
+| `given_name`                 | string                                                 | {{<hint danger>}}Required {{</hint>}} |                                                                |
+| `family_name`                | string                                                 | {{<hint danger>}}Required {{</hint>}} |                                                                |
+| `date_of_birth`              | date                                                   | {{<hint danger>}}Required {{</hint>}} |                                                                |
+| `tax_id`                     | string                                                 | {{<hint info>}}Optional {{</hint>}}   | Required if `tax_id_type` is set.                              |
+| `tax_id_type`                | [ENUM.TaxIdType]({{< relref "#tax-id-type" >}})        | {{<hint info>}}Optional {{</hint>}}   | Required if `tax_id` is set.                                   |
+| `country_of_citizenship`     | string                                                 | {{<hint info>}}Optional {{</hint>}}   | 3 letter country code acceptable                               |
+| `country_of_birth`           | string                                                 | {{<hint info>}}Optional {{</hint>}}   | 3 letter country code acceptable                               |
+| `country_of_tax_residency`   | string                                                 | {{<hint danger>}}Required {{</hint>}} | 3 letter country code acceptable                               |
+| `visa_type`                  | [ENUM.VisaType]({{< relref "#visa-type" >}})           | {{<hint info>}}Optional {{</hint>}}   | Only used to collect visa types for users residing in the USA. |
+| `visa_expiration_date`       | date                                                   | {{<hint info>}}Optional {{</hint>}}   | Required if `visa_type` is set.                                |
+| `date_of_departure_from_usa` | date                                                   | {{<hint info>}}Optional {{</hint>}}   | Required if `visa_type` = `B1` or `B2`                         |
+| `permanent_resident`         | boolean                                                | {{<hint info>}}Optional {{</hint>}}   | Only used to collect permanent residence status in the USA.    |
+| `funding_source`             | [ENUM.FundingSource]({{< relref "#funding-source" >}}) | {{<hint danger>}}Required {{</hint>}} |                                                                |
+| `annual_income_min`          | string/number                                          | {{<hint info>}}Optional {{</hint>}}   |                                                                |
+| `annual_income_max`          | string/number                                          | {{<hint info>}}Optional {{</hint>}}   |                                                                |
+| `liquid_net_worth_min`       | string/number                                          | {{<hint info>}}Optional {{</hint>}}   |                                                                |
+| `liquid_net_worth_max`       | string/number                                          | {{<hint info>}}Optional {{</hint>}}   |                                                                |
+| `total_net_worth_min`        | string/number                                          | {{<hint info>}}Optional {{</hint>}}   |                                                                |
+| `total_net_worth_max`        | string/number                                          | {{<hint info>}}Optional {{</hint>}}   |                                                                |
+| `extra`                      | object                                                 | {{<hint info>}}Optional {{</hint>}}   | Any additional information used for KYC purposes               |
 
 **Disclosures**
 
@@ -856,7 +856,7 @@ Note: The dates collected on the form are in a slightly different format than ho
 
 #### Sample Request Body
 
-Note: This W-8 BEN sample is document object that will be included in the documents parameter of the account object. 
+Note: This W-8 BEN sample is document object that will be included in the documents parameter of the account object.
 
 ```json
 {
@@ -1093,19 +1093,19 @@ This operation updates account information. The following attribute are modifiab
 
 **Identity**
 
-| Attribute              | Key         | Required                           | Notes |
-| ---------------------- | ----------- | ---------------------------------- | ----- |
-| `visa_type`            | [].identity | {{<hint info>}}Optional{{</hint>}} | Only used to collect visa types for users residing in the USA. |
-| `visa_expiration_date` | [].identity | {{<hint info>}}Optional{{</hint>}} | Required if `visa_type` is set.                                |
-| `date_of_departure_from_usa` | [].identity | {{<hint info>}}Optional{{</hint>}} | Required if `visa_type` = `B1` or `B2`                   |
-| `permanent_resident`   | [].identity | {{<hint info>}}Optional{{</hint>}} | Only used to collect permanent residence status in the USA.    |
-| `funding_source`       | [].identity | {{<hint info>}}Optional{{</hint>}} |       |
-| `annual_income_min`    | [].identity | {{<hint info>}}Optional{{</hint>}} |       |
-| `annual_income_max`    | [].identity | {{<hint info>}}Optional{{</hint>}} |       |
-| `liquid_net_worth_min` | [].identity | {{<hint info>}}Optional{{</hint>}} |       |
-| `liquid_net_worth_max` | [].identity | {{<hint info>}}Optional{{</hint>}} |       |
-| `total_net_worth_min`  | [].identity | {{<hint info>}}Optional{{</hint>}} |       |
-| `total_net_worth_max`  | [].identity | {{<hint info>}}Optional{{</hint>}} |       |
+| Attribute                    | Key         | Required                           | Notes                                                          |
+| ---------------------------- | ----------- | ---------------------------------- | -------------------------------------------------------------- |
+| `visa_type`                  | [].identity | {{<hint info>}}Optional{{</hint>}} | Only used to collect visa types for users residing in the USA. |
+| `visa_expiration_date`       | [].identity | {{<hint info>}}Optional{{</hint>}} | Required if `visa_type` is set.                                |
+| `date_of_departure_from_usa` | [].identity | {{<hint info>}}Optional{{</hint>}} | Required if `visa_type` = `B1` or `B2`                         |
+| `permanent_resident`         | [].identity | {{<hint info>}}Optional{{</hint>}} | Only used to collect permanent residence status in the USA.    |
+| `funding_source`             | [].identity | {{<hint info>}}Optional{{</hint>}} |                                                                |
+| `annual_income_min`          | [].identity | {{<hint info>}}Optional{{</hint>}} |                                                                |
+| `annual_income_max`          | [].identity | {{<hint info>}}Optional{{</hint>}} |                                                                |
+| `liquid_net_worth_min`       | [].identity | {{<hint info>}}Optional{{</hint>}} |                                                                |
+| `liquid_net_worth_max`       | [].identity | {{<hint info>}}Optional{{</hint>}} |                                                                |
+| `total_net_worth_min`        | [].identity | {{<hint info>}}Optional{{</hint>}} |                                                                |
+| `total_net_worth_max`        | [].identity | {{<hint info>}}Optional{{</hint>}} |                                                                |
 
 **Disclosures**
 
