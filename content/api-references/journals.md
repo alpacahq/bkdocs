@@ -81,8 +81,8 @@ For more on Journals click [here]({{< relref "../../integration/funding/#cash-po
 | Status             | Description                                                                                                                                                   |
 | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `queued`           | Journal in queue to be processed. Journal is not processed yet.                                                                                               |
+| `triaged`          | Journal is undergoing initial validations before it is sent to be processed.
 | `sent_to_clearing` | Journal sent to be processed. Journal is not processed yet.                                                                                                   |
-| `triaged`          | Journal has been reserved for processing.
 | `pending`          | Journal pending to be processed.                                                                                                                              |
 | `executed`         | Journal executed and balances updated for both sides of the journal transaction. This is _not_ a final status, journals can be reversed if there is an error. |
 | `rejected`         | Journal rejected. Please try again.                                                                                                                           |
