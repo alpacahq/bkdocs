@@ -72,7 +72,7 @@ This enables searching for an array of corporate action announcements based on c
 
 | Parameter   | Type                                            | Required                                | Notes      |
 | ----------- | ----------------------------------------------- | --------------------------------------- | ---------- |
-| `ca_type`   | string                                          | {{<hint danger>}}Required {{</hint>}}   | A comma-delimited list of ENUM.CorporateActionType values |
+| `ca_types`   | string                                          | {{<hint danger>}}Required {{</hint>}}   | A comma-delimited list of ENUM.CorporateActionType values |
 | `since`     | string                                          | {{<hint danger>}}Required {{</hint>}}   | The start (inclusive) of the date range when searching corporate action announcements. This should follow the YYYY-MM-DD format. The date range is limited to 90 days. |
 | `until`     | string                                          | {{<hint danger>}}Required {{</hint>}}   | The end (inclusive) of the date range when searching corporate action announcements. This should follow the YYYY-MM-DD format. The date range is limited to 90 days. |
 | `symbol`    | string                                          | {{<hint info>}}Optional {{</hint>}}     | The symbol of the company initiating the announcement. |
