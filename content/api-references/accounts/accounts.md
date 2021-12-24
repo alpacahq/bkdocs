@@ -344,7 +344,6 @@ Accounts API supports fixtures in Sandbox Environment. You can pass the desired 
 | `APPROVAL_PENDING` | `/fixtures/status=APPROVAL_PENDING/fixtures/` |
 | `APPROVED`         | `/fixtures/status=APPROVED/fixtures/`         |
 | `REJECTED`         | `/fixtures/status=REJECTED/fixtures/`         |
-| `ACTIVE`           | `/fixtures/status=ACTIVE/fixtures/`           |
 | `DISABLED`         | `/fixtures/status=DISABLED/fixtures/`         |
 | `ACCOUNT_CLOSED`   | `/fixtures/status=ACCOUNT_CLOSED/fixtures/`   |
 
