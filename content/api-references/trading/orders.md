@@ -246,7 +246,7 @@ The requested Order object
 
 ## **Getting an Order By Client Order ID**
 
-`GET /v1/trading/accounts/{account_id}/orders/:client_order_id`
+`GET /v1/trading/accounts/{account_id}/orders:by_client_order_id`
 
 Retrieves a single order for the given `client_order_id`.
 
