@@ -96,11 +96,20 @@ The Accounts API allows you to create and manage the accounts under your brokera
 
 | Attribute         | Notes                                                                                        |
 | ----------------- | -------------------------------------------------------------------------------------------- |
+| `account_type`    | Designate which type of account is to be opened with Alpaca                                                    |
 | `contact`         | Contact information about the user                                                           |
 | `identity`        | KYC information about the user                                                               |
 | `disclosures`     | Required disclosures about the user                                                          |
 | `documents`       | Any documents that need to be uploaded (eg. passport, visa, ...)                             |
 | `trusted_contact` | The contact information of a trusted contact to the user in case account recovery is needed. |
+| `minor_identity`  | Information about the minor associated with the account                     |
+
+**Account Type**
+
+
+| Attribute        | Type   |
+| ---------------- | ------ |
+| `account_type`   | string |
 
 **Contact**
 
@@ -209,6 +218,21 @@ In addition, only one of the following is **required**,
 | `state`          | string |
 | `postal_code`    | string |
 | `country`        | string |
+
+**Minor Identity**
+
+| Attribute                  | Type                                                            |
+| -------------------------- | --------------------------------------------------------------- |
+| `given_name`               | string                                                          |
+| `family_name`              | string                                                          |
+| `email`                    | string                                                          |
+| `date_of_birth`            | date                                                            |
+| `tax_id`                   | string                                                          |
+| `tax_id_type`              | [ENUM.TaxIdType]({{< relref "#tax-id-type" >}})                 |
+| `country_of_citizenship`   | string                                                          |
+| `country_of_birth`         | string                                                          |
+| `country_of_tax_residence` | string                                                          |
+| `state`                    | string                                                          |
 
 ### Enums
 
@@ -363,7 +387,9 @@ Simulating a rejected account.
 
 `POST /v1/accounts`
 
-Submit an account application with KYC information. This will create a trading account for the end user. The account status may or may not be ACTIVE immediately and you will receive account status updates on the event API.
+Submit an account application with KYC information to create an account for the end user. The account status may or may not be ACTIVE immediately and you will receive account status updates on the event API.
+
+The custodian is the adult associated with a custodial account. They will submit an account application with the signed custodian customer agreement to open an account on behalf of the minor.
 
 ### Request
 
@@ -435,75 +461,83 @@ Submit an account application with KYC information. This will create a trading a
 
 #### Parameters
 
-| Attribute         | Requirement                           |
-| ----------------- | ------------------------------------- |
-| `contact`         | {{<hint danger>}}Required {{</hint>}} |
-| `identity`        | {{<hint danger>}}Required {{</hint>}} |
-| `disclosures`     | {{<hint danger>}}Required {{</hint>}} |
-| `documents`       | {{<hint info>}}Optional {{</hint>}}   |
-| `trusted_contact` | {{<hint info>}}Optional {{</hint>}}   |
+| Attribute         | Requirement - Trading                 | Requirement - Custodial               |
+| ----------------- | ------------------------------------- | ------------------------------------- |
+| `account_type`    | {{<hint info>}}Optional {{</hint>}}   | {{<hint danger>}}Required {{</hint>}} |
+| `contact`         | {{<hint danger>}}Required {{</hint>}} | {{<hint danger>}}Required {{</hint>}} |
+| `identity`        | {{<hint danger>}}Required {{</hint>}} | {{<hint danger>}}Required {{</hint>}} |
+| `disclosures`     | {{<hint danger>}}Required {{</hint>}} | {{<hint danger>}}Required {{</hint>}} |
+| `documents`       | {{<hint info>}}Optional {{</hint>}}   | {{<hint info>}}Optional {{</hint>}}   |
+| `trusted_contact` | {{<hint info>}}Optional {{</hint>}}   | {{<hint info>}}Optional {{</hint>}}   |
+| `minor_identity`  | {{<hint info>}}Optional {{</hint>}}   | {{<hint danger>}}Required {{</hint>}} |
+
+**Account Type**
+
+| Attribute        | Type   | Requirement - Trading               | Requirement - Custodial               |Notes                                                                                                     |
+| ---------------- | ------ | ----------------------------------- | ------------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| `email_address`  | string | {{<hint info>}}Optional {{</hint>}} | {{<hint danger>}}Required {{</hint>}} | Passing `custodial` will create a custodial account. Nothing should be passed when creating a standard trading account.                   |
 
 **Contact**
 
-| Attribute        | Type   | Requirement                           | Notes                                                                                                  |
-| ---------------- | ------ | ------------------------------------- | ------------------------------------------------------------------------------------------------------ |
-| `email_address`  | string | {{<hint danger>}}Required {{</hint>}} |                                                                                                        |
-| `phone_number`   | string | {{<hint danger>}}Required {{</hint>}} | _Phone number should include the country code, format: "+15555555555"_                                 |
-| `street_address` | string | {{<hint danger>}}Required {{</hint>}} |                                                                                                        |
-| `city`           | string | {{<hint danger>}}Required {{</hint>}} |                                                                                                        |
-| `state`          | string | {{<hint info>}}Optional{{</hint>}}    | {{<hint danger>}}required if `country_of_tax_residency` in identity model (below) is ‘USA’ {{</hint>}} |
-| `postal_code`    | string | {{<hint info>}}Optional {{</hint>}}   |                                                                                                        |
+| Attribute        | Type   | Requirement - Trading                 |  Requirement - Custodial               |Notes                                                                                                  |
+| ---------------- | ------ | ------------------------------------- |  ------------------------------------- |  ------------------------------------------------------------------------------------------------------ |
+| `email_address`  | string | {{<hint danger>}}Required {{</hint>}} | {{<hint danger>}}Required {{</hint>}} |                                                                                             |
+| `phone_number`   | string | {{<hint danger>}}Required {{</hint>}} | {{<hint danger>}}Required {{</hint>}} | _Phone number should include the country code, format: "+15555555555"_                                                     |
+| `street_address` | string | {{<hint danger>}}Required {{</hint>}} | {{<hint danger>}}Required {{</hint>}} |                                                                                             |
+| `city`           | string | {{<hint danger>}}Required {{</hint>}} | {{<hint danger>}}Required {{</hint>}} |                                                                                             |
+| `state`          | string | {{<hint info>}}Optional{{</hint>}}    | {{<hint danger>}}Required {{</hint>}} | {{<hint danger>}}required for trading accounts if `country_of_tax_residency` in identity model (below) is ‘USA’ {{</hint>}} |
+| `postal_code`    | string | {{<hint info>}}Optional {{</hint>}}   | {{<hint info>}}Optional {{</hint>}} |                                                                                             |
 
 **Identity**
 
-| Attribute                    | Type                                                   | Requirement                           | Notes                                                          |
-| ---------------------------- | ------------------------------------------------------ | ------------------------------------- | -------------------------------------------------------------- |
-| `given_name`                 | string                                                 | {{<hint danger>}}Required {{</hint>}} |                                                                |
-| `family_name`                | string                                                 | {{<hint danger>}}Required {{</hint>}} |                                                                |
-| `date_of_birth`              | date                                                   | {{<hint danger>}}Required {{</hint>}} |                                                                |
-| `tax_id`                     | string                                                 | {{<hint info>}}Optional {{</hint>}}   | Required if `tax_id_type` is set.                              |
-| `tax_id_type`                | [ENUM.TaxIdType]({{< relref "#tax-id-type" >}})        | {{<hint info>}}Optional {{</hint>}}   | Required if `tax_id` is set.                                   |
-| `country_of_citizenship`     | string                                                 | {{<hint info>}}Optional {{</hint>}}   | 3 letter country code acceptable                               |
-| `country_of_birth`           | string                                                 | {{<hint info>}}Optional {{</hint>}}   | 3 letter country code acceptable                               |
-| `country_of_tax_residency`   | string                                                 | {{<hint danger>}}Required {{</hint>}} | 3 letter country code acceptable                               |
-| `visa_type`                  | [ENUM.VisaType]({{< relref "#visa-type" >}})           | {{<hint info>}}Optional {{</hint>}}   | Only used to collect visa types for users residing in the USA. |
-| `visa_expiration_date`       | date                                                   | {{<hint info>}}Optional {{</hint>}}   | Required if `visa_type` is set.                                |
-| `date_of_departure_from_usa` | date                                                   | {{<hint info>}}Optional {{</hint>}}   | Required if `visa_type` = `B1` or `B2`                         |
-| `permanent_resident`         | boolean                                                | {{<hint info>}}Optional {{</hint>}}   | Only used to collect permanent residence status in the USA.    |
-| `funding_source`             | [ENUM.FundingSource]({{< relref "#funding-source" >}}) | {{<hint danger>}}Required {{</hint>}} |                                                                |
-| `annual_income_min`          | string/number                                          | {{<hint info>}}Optional {{</hint>}}   |                                                                |
-| `annual_income_max`          | string/number                                          | {{<hint info>}}Optional {{</hint>}}   |                                                                |
-| `liquid_net_worth_min`       | string/number                                          | {{<hint info>}}Optional {{</hint>}}   |                                                                |
-| `liquid_net_worth_max`       | string/number                                          | {{<hint info>}}Optional {{</hint>}}   |                                                                |
-| `total_net_worth_min`        | string/number                                          | {{<hint info>}}Optional {{</hint>}}   |                                                                |
-| `total_net_worth_max`        | string/number                                          | {{<hint info>}}Optional {{</hint>}}   |                                                                |
-| `extra`                      | object                                                 | {{<hint info>}}Optional {{</hint>}}   | Any additional information used for KYC purposes               |
+| Attribute                    | Type                                                   | Requirement - Trading                 |  Requirement - Custodial                 | Notes                                                          |
+| ---------------------------- | ------------------------------------------------------ | ------------------------------------- | --------------------------------------- | ------------------------------------------------------------------------------------- |
+| `given_name`                 | string                                                 | {{<hint danger>}}Required {{</hint>}} | {{<hint danger>}}Required {{</hint>}}  |                                                                                                |
+| `family_name`                | string                                                 | {{<hint danger>}}Required {{</hint>}} | {{<hint danger>}}Required {{</hint>}}  |                                                                                                |
+| `date_of_birth`              | date                                                   | {{<hint danger>}}Required {{</hint>}} | {{<hint danger>}}Required {{</hint>}}  |                                                                                                |
+| `tax_id`                     | string                                                 | {{<hint info>}}Optional {{</hint>}}   | {{<hint danger>}}Required {{</hint>}}  | Required for trading accounts if `tax_id_type` is set. Always required for custodial accounts. |
+| `tax_id_type`                | [ENUM.TaxIdType]({{< relref "#tax-id-type" >}})        | {{<hint info>}}Optional {{</hint>}}   | {{<hint danger>}}Required {{</hint>}}  | Required for trading accounts if `tax_id` is set. Must be `US_SSN` for custodial accounts.     |
+| `country_of_citizenship`     | string                                                 | {{<hint info>}}Optional {{</hint>}}   | {{<hint danger>}}Required {{</hint>}}  | 3 letter country code acceptable. Must be `USA` for custodial accounts.                        |
+| `country_of_birth`           | string                                                 | {{<hint info>}}Optional {{</hint>}}   | {{<hint danger>}}Required {{</hint>}}  | 3 letter country code acceptable                                                               |
+| `country_of_tax_residency`   | string                                                 | {{<hint danger>}}Required {{</hint>}} | {{<hint danger>}}Required {{</hint>}}  | 3 letter country code acceptable. Must be `USA` for custodial accounts.                        |
+| `visa_type`                  | [ENUM.VisaType]({{< relref "#visa-type" >}})           | {{<hint info>}}Optional {{</hint>}}   | {{<hint info>}}Optional {{</hint>}}    | Only used to collect visa types for users residing in the USA.                                 |
+| `visa_expiration_date`       | date                                                   | {{<hint info>}}Optional {{</hint>}}   | {{<hint info>}}Optional {{</hint>}}    | Required if `visa_type` is set.                                                                |
+| `date_of_departure_from_usa` | date                                                   | {{<hint info>}}Optional {{</hint>}}   | {{<hint info>}}Optional {{</hint>}}    | Required if `visa_type` = `B1` or `B2`                                                         |
+| `permanent_resident`         | boolean                                                | {{<hint info>}}Optional {{</hint>}}   | {{<hint info>}}Optional {{</hint>}}    | Only used to collect permanent residence status in the USA.                                    |
+| `funding_source`             | [ENUM.FundingSource]({{< relref "#funding-source" >}}) | {{<hint danger>}}Required {{</hint>}} | {{<hint danger>}}Required {{</hint>}}  |                                                                                                |
+| `annual_income_min`          | string/number                                          | {{<hint info>}}Optional {{</hint>}}   | {{<hint danger>}}Required {{</hint>}}  |                                                                                                |
+| `annual_income_max`          | string/number                                          | {{<hint info>}}Optional {{</hint>}}   | {{<hint danger>}}Required {{</hint>}}  |                                                                                                |
+| `liquid_net_worth_min`       | string/number                                          | {{<hint info>}}Optional {{</hint>}}   | {{<hint danger>}}Required {{</hint>}}  |                                                                                                |
+| `liquid_net_worth_max`       | string/number                                          | {{<hint info>}}Optional {{</hint>}}   | {{<hint danger>}}Required {{</hint>}}  |                                                                                                |
+| `total_net_worth_min`        | string/number                                          | {{<hint info>}}Optional {{</hint>}}   | {{<hint info>}}Optional {{</hint>}}    |                                                                                                |
+| `total_net_worth_max`        | string/number                                          | {{<hint info>}}Optional {{</hint>}}   | {{<hint info>}}Optional {{</hint>}}    |                                                                                                |
+| `extra`                      | object                                                 | {{<hint info>}}Optional {{</hint>}}   | {{<hint info>}}Optional {{</hint>}}    |  Any additional information used for KYC purposes                                              |
 
 **Disclosures**
 
 It is your responsibility as the service provider to denote if the account owner falls under each category defined by FINRA rules. We recommend asking these questions at any point of the onboarding process of each account owner in the form of Y/N and Radio Buttons.
 
-| Attribute                         | Type                                                         | Requirement                           | Notes                                                                                                                                                                 |
-| --------------------------------- | ------------------------------------------------------------ | ------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `is_control_person`               | boolean                                                      | {{<hint danger>}}Required {{</hint>}} | Whether user holds a controlling position in a publicly traded company, member of the board of directors or has policy making abilities in a publicly traded company. |
-| `is_affiliated_exchange_or_finra` | boolean                                                      | {{<hint danger>}}Required {{</hint>}} |                                                                                                                                                                       |
-| `is_politically_exposed`          | boolean                                                      | {{<hint danger>}}Required {{</hint>}} |                                                                                                                                                                       |
-| `immediate_family_exposed`        | boolean                                                      | {{<hint danger>}}Required {{</hint>}} | If your user’s immediate family member (sibling, husband/wife, child, parent) is either politically exposed or holds a control position.                              |
-| `employment_status`               | [ENUM.EmploymentStatus]({{< relref "#employment-status" >}}) | {{<hint info>}}Optional {{</hint>}}   |                                                                                                                                                                       |
-| `employer_name`                   | string                                                       | {{<hint info>}}Optional {{</hint>}}   |                                                                                                                                                                       |
-| `employer_address`                | string                                                       | {{<hint info>}}Optional {{</hint>}}   |                                                                                                                                                                       |
-| `employment_position`             | string                                                       | {{<hint info>}}Optional {{</hint>}}   |                                                                                                                                                                       |
+| Attribute                         | Type                                                         | Requirement - Trading                | Requirement - Custodial                 | Notes                           |
+| --------------------------------- | ------------------------------------------------------------ | ------------------------------------  | ------------------------------------- | ------------------------------- |
+| `is_control_person`               | boolean                                                      | {{<hint danger>}}Required {{</hint>}} | {{<hint danger>}}Required {{</hint>}} | Whether user holds a controlling position in a publicly traded company, member of the board of directors or has policy making abilities in a publicly traded company.    |
+| `is_affiliated_exchange_or_finra` | boolean                                                      | {{<hint danger>}}Required {{</hint>}} | {{<hint danger>}}Required {{</hint>}} |                                 |
+| `is_politically_exposed`          | boolean                                                      | {{<hint danger>}}Required {{</hint>}} | {{<hint danger>}}Required {{</hint>}} |                                 |
+| `immediate_family_exposed`        | boolean                                                      | {{<hint danger>}}Required {{</hint>}} | {{<hint danger>}}Required {{</hint>}} | If your user’s immediate family member (sibling, husband/wife, child, parent) is either politically exposed or holds a control position.                          |
+| `employment_status`               | [ENUM.EmploymentStatus]({{< relref "#employment-status" >}}) | {{<hint info>}}Optional {{</hint>}}   | {{<hint info>}}Optional {{</hint>}} |                                   |
+| `employer_name`                   | string                                                       | {{<hint info>}}Optional {{</hint>}}   | {{<hint info>}}Optional {{</hint>}} |                                   |
+| `employer_address`                | string                                                       | {{<hint info>}}Optional {{</hint>}}   | {{<hint info>}}Optional {{</hint>}} |                                   |
+| `employment_position`             | string                                                       | {{<hint info>}}Optional {{</hint>}}   | {{<hint info>}}Optional {{</hint>}} |                                   |
 
 **Agreements**
 
-In order to comply with Alpaca's terms of service, each account owner must be presented the following agreements.
+In order to comply with Alpaca's terms of service, each account owner must be presented the following agreements. For custodial accounts, the Custodian Customer Agreement will be the only required document.
 
-| Attribute       | Type                                              | Requirement                           |
-| --------------- | ------------------------------------------------- | ------------------------------------- |
-| `[].agreement`  | [ENUM.DocumentType]({{< relref "#agreements" >}}) | {{<hint danger>}}Required {{</hint>}} |
-| `[].signed_at`  | string (timestamp)                                | {{<hint danger>}}Required {{</hint>}} |
-| `[].ip_address` | string                                            | {{<hint danger>}}Required {{</hint>}} |
-| `[].revision`   | string                                            | {{<hint danger>}}Optional {{</hint>}} |
+| Attribute       | Type                                              | Requirement - Trading                 | Requirement - Custodial      |
+| --------------- | ------------------------------------------------- | ------------------------------------- |---------------------------- |
+| `[].agreement`  | [ENUM.DocumentType]({{< relref "#agreements" >}}) | {{<hint danger>}}Required {{</hint>}} | {{<hint danger>}}Required {{</hint>}}     |
+| `[].signed_at`  | string (timestamp)                                | {{<hint danger>}}Required {{</hint>}} | {{<hint danger>}}Required {{</hint>}}     |
+| `[].ip_address` | string                                            | {{<hint danger>}}Required {{</hint>}} | {{<hint danger>}}Required {{</hint>}}     |
+| `[].revision`   | string                                            | {{<hint info>}}Optional {{</hint>}} | {{<hint info>}}Optional {{</hint>}}     | 
 
 **Documents**
 
@@ -511,45 +545,62 @@ In order to comply with Alpaca's terms of service, each account owner must be pr
 
    This model consists of a series of documents based on the KYC requirements. Documents are binary objects whose contents are encoded in base64. Each encoded content size is limited to 32MB.
 
-   | Attribute           | Type                                                 | Required                              |
-   | ------------------- | ---------------------------------------------------- | ------------------------------------- |
-   | `document_type`     | [ENUM.DocumentType]({{< relref "#document-type" >}}) | {{<hint danger>}}Required{{</hint>}}  |
-   | `document_sub_type` | string                                               | {{<hint info>}}Optional {{</hint>}}   |
-   | `content`           | base64 string                                        | {{<hint danger>}}Required {{</hint>}} |
-   | `mime_type`         | string                                               | {{<hint danger>}}Required {{</hint>}} |
+   | Attribute           | Type                                                 | Requirment - Trading                  | Requirement - Custodial             |
+   | ------------------- | ---------------------------------------------------- | ------------------------------------- | ------------------------------------- |
+   | `document_type`     | [ENUM.DocumentType]({{< relref "#document-type" >}}) | {{<hint danger>}}Required{{</hint>}}  | {{<hint danger>}}Required{{</hint>}}   |
+   | `document_sub_type` | string                                               | {{<hint info>}}Optional {{</hint>}}   | {{<hint info>}}Optional {{</hint>}}  |
+   | `content`           | base64 string                                        | {{<hint danger>}}Required {{</hint>}} | {{<hint danger>}}Required{{</hint>}}   |
+   | `mime_type`         | string                                               | {{<hint danger>}}Required {{</hint>}} | {{<hint danger>}}Required{{</hint>}}   |
 
 2. **`Document`**
 
    To add an additional document after submission, please use the `Document` model below to replace any `DocumentUpload`
 
-   | Attribute           | Type                                                 | Required                             |
-   | ------------------- | ---------------------------------------------------- | ------------------------------------ |
-   | `document_type`     | [ENUM.DocumentType]({{< relref "#document-type" >}}) | {{<hint danger>}}Required{{</hint>}} |
-   | `document_sub_type` | string                                               | {{<hint info>}}Optional {{</hint>}}  |
-   | `id`                | UUID                                                 | {{<hint danger>}}Required{{</hint>}} |
-   | `mime_type`         | string                                               | {{<hint danger>}}Required{{</hint>}} |
-   | `created_at`        | timestamp string                                     | {{<hint danger>}}Required{{</hint>}} |
+   | Attribute           | Type                                                 | Requirement - Trading                | Requirement - Custodial             |
+   | ------------------- | ---------------------------------------------------- | ------------------------------------ | ------------------------------------ |
+   | `document_type`     | [ENUM.DocumentType]({{< relref "#document-type" >}}) | {{<hint danger>}}Required{{</hint>}} | {{<hint danger>}}Required{{</hint>}}   |
+   | `document_sub_type` | string                                               | {{<hint info>}}Optional {{</hint>}}  | {{<hint info>}}Optional {{</hint>}}  |
+   | `id`                | UUID                                                 | {{<hint danger>}}Required{{</hint>}} | {{<hint danger>}}Required{{</hint>}}   |
+   | `mime_type`         | string                                               | {{<hint danger>}}Required{{</hint>}} | {{<hint danger>}}Required{{</hint>}}   |
+   | `created_at`        | timestamp string                                     | {{<hint danger>}}Required{{</hint>}} | {{<hint danger>}}Required{{</hint>}}   |
 
 **Trusted Contact**
 
 This model input is optional. However, the client should make reasonable effort to obtain the trusted contact information. See more details in FINRA Notice 17-11
 
-| Attribute     | Type   | Required                             | Notes      |
-| ------------- | ------ | ------------------------------------ | ---------- |
-| `given_name`  | string | {{<hint danger>}}Required{{</hint>}} | First name |
-| `family_name` | string | {{<hint danger>}}Required{{</hint>}} | Last name  |
+| Attribute     | Type   | Requirement - Trading                | Requirement - Custodial              |  Notes      |
+| ------------- | ------ | ------------------------------------ | ------------------------------------ | ---------- |
+| `given_name`  | string | {{<hint danger>}}Required{{</hint>}} | {{<hint danger>}}Required{{</hint>}} | First name |
+| `family_name` | string | {{<hint danger>}}Required{{</hint>}} | {{<hint danger>}}Required{{</hint>}} | Last name  |
 
 In addition, only one of the following is **required**,
 
-| Attribute        | Type   | Required                           | Notes                         |
-| ---------------- | ------ | ---------------------------------- | ----------------------------- |
-| `email_address`  | string | {{<hint info>}}Optional{{</hint>}} |                               |
-| `phone_number`   | string | {{<hint info>}}Optional{{</hint>}} |                               |
-| `street_address` | string | {{<hint info>}}Optional{{</hint>}} |                               |
-| `city`           | string | {{<hint info>}}Optional{{</hint>}} | If `street_address` is chosen |
-| `state`          | string | {{<hint info>}}Optional{{</hint>}} | If `street_address` is chosen |
-| `postal_code`    | string | {{<hint info>}}Optional{{</hint>}} | If `street_address` is chosen |
-| `country`        | string | {{<hint info>}}Optional{{</hint>}} | If `street_address` is chosen |
+| Attribute        | Type   | Requirement - Trading              | Requirement - Custodial            | Notes                         |
+| ---------------- | ------ | ---------------------------------- | ---------------------------------- | ----------------------------- |
+| `email_address`  | string | {{<hint info>}}Optional{{</hint>}} | {{<hint info>}}Optional{{</hint>}} |                               |
+| `phone_number`   | string | {{<hint info>}}Optional{{</hint>}} | {{<hint info>}}Optional{{</hint>}} |                               |
+| `street_address` | string | {{<hint info>}}Optional{{</hint>}} | {{<hint info>}}Optional{{</hint>}} |                               |
+| `city`           | string | {{<hint info>}}Optional{{</hint>}} | {{<hint info>}}Optional{{</hint>}} | If `street_address` is chosen |
+| `state`          | string | {{<hint info>}}Optional{{</hint>}} | {{<hint info>}}Optional{{</hint>}} | If `street_address` is chosen |
+| `postal_code`    | string | {{<hint info>}}Optional{{</hint>}} | {{<hint info>}}Optional{{</hint>}} | If `street_address` is chosen |
+| `country`        | string | {{<hint info>}}Optional{{</hint>}} | {{<hint info>}}Optional{{</hint>}} | If `street_address` is chosen |
+
+**Minor Identity**
+
+This model input is only required for custodial accounts. 
+
+| Attribute                   | Type   | Requirment - Custodial                 | Notes                         |
+| --------------------------- | ------ | -------------------------------------- | ----------------------------- |
+| `given_name`                | string                                          | {{<hint danger>}}Required{{</hint>}} |                             |
+| `family_name`               | string                                          | {{<hint danger>}}Required{{</hint>}} |                             |
+| `email`                     | string                                          | {{<hint danger>}}Required{{</hint>}} |                             |
+| `date_of_birth`             | date                                            | {{<hint danger>}}Required{{</hint>}} |                             |
+| `tax_id`                    | string                                          | {{<hint danger>}}Required{{</hint>}} |                             |
+| `tax_id_type`               | [ENUM.TaxIdType]({{< relref "#tax-id-type" >}}) | {{<hint danger>}}Required{{</hint>}} | Must alway be `US_SSN`                            |
+| `country_of_citizenship`    | string                                          | {{<hint danger>}}Required{{</hint>}} |                             |
+| `country_of_birth`          | string                                          | {{<hint danger>}}Required{{</hint>}} |                             |
+| `country_of_tax_residence`  | string                                          | {{<hint danger>}}Required{{</hint>}} |                             |
+| `state`                     | string                                          | {{<hint danger>}}Required{{</hint>}} |                             |
 
 ### Response
 
@@ -613,7 +664,7 @@ _Some server error occurred. Please contact Alpaca._
 
 `POST /v1/accounts/{account_id}/cip`
 
-The customer identification program (CIP) API allows you to submit the CIP results received from your KYC provider.
+The customer identification program (CIP) API allows you to submit the CIP results received from your KYC provider. For custodial accounts, KYC should be run based on the adult's information.
 
 Financial institutions and other obliged entities must have reasonable procedures to gather and maintain information on customers’ identities, along with running watchlist checks on them.
 
@@ -839,7 +890,7 @@ N/A
 
 ### Response
 
-It will return the CIP ID generated on submission, `account_id`, and CIP data if it exists otherwise will throw an error.
+It will return the CIP ID generated on submission, `account_id`, and CIP data if it exists, otherwise, this will throw an error.
 
 ---
 
@@ -955,7 +1006,7 @@ N/A
 
 ### Response
 
-Will return an account if account with `account_id` exists, otherwise will throw an error.
+Will return an account if account with `account_id` exists, otherwise, this will throw an error.
 
 ---
 
@@ -1141,6 +1192,23 @@ Only one of `email_address`, `phone_number` or `streets_address` (with the other
 | `postal_code`    | string | {{<hint info>}}Optional{{</hint>}} | If `street_address` is chosen |
 | `country`        | string | {{<hint info>}}Optional{{</hint>}} | If `street_address` is chosen |
 
+**Minor Identity**
+
+This is only applicable to custodial accounts. 
+
+| Attribute                   | Type   | Requirment - Custodial                 | Notes                         |
+| --------------------------- | ------ | -------------------------------------- | ----------------------------- |
+| `given_name`                | string                                          | {{<hint info>}}Optional{{</hint>}} |                             |
+| `family_name`               | string                                          | {{<hint info>}}Optional{{</hint>}} |                             |
+| `email`                     | string                                          | {{<hint info>}}Optional{{</hint>}} |                             |
+| `date_of_birth`             | date                                            | {{<hint info>}}Optional{{</hint>}} |                             |
+| `tax_id`                    | string                                          | {{<hint info>}}Optional{{</hint>}} |                             |
+| `tax_id_type`               | [ENUM.TaxIdType]({{< relref "#tax-id-type" >}}) | {{<hint info>}}Optional{{</hint>}} | Must alway be `US_SSN`                            |
+| `country_of_citizenship`    | string                                          | {{<hint info>}}Optional{{</hint>}} |                             |
+| `country_of_birth`          | string                                          | {{<hint info>}}Optional{{</hint>}} |                             |
+| `country_of_tax_residence`  | string                                          | {{<hint info>}}Optional{{</hint>}} |                             |
+| `state`                     | string                                          | {{<hint info>}}Optional{{</hint>}} |                             |
+
 ### Response
 
 If all parameters are valid and updates have been made, it returns with status code `200`. The response is the account model.
@@ -1198,5 +1266,65 @@ In the `account_id` path parameter, provide the `id` of the account to be closed
 422 - Unprocessable Entity
 
 {{</hint>}}
+
+---
+
+## **Age of Majority by State**
+
+| State          | UGMA | UTMA |
+| -------------- | ---- | ---- |
+| `Alabama`      | 19   | 21   |
+| `Alaska`       | 18   | 21   |
+| `Arizona`      | 18   | 21   |
+| `Arkansas`     | 21   | 21   |
+| `California`   | 18   | 18   |
+| `Colorado`     | 21   | 21   |
+| `Connecticut`  | 21   | 21   |
+| `Delaware`     | 18   | 21   |
+| `District of Columbia`| 18   | 18   |
+| `Florida`      | 18   | 21   |
+| `Georgia`      | 21   | 21   |
+| `Guam`         | 21   | N/A   |
+| `Hawaii`       | 18   | 21   |
+| `Idaho`        | 18   | 21   |
+| `Illinois`     | 21   | 21   |
+| `Indiana`      | 18   | 21   |
+| `Iowa`         | 21   | 21   |
+| `Kansas`       | 18   | 21   |
+| `Kentucky`     | 21   | 18   |
+| `Louisiana`    | 18   | 18   |
+| `Maine`        | 21   | 18   |
+| `Maryland`     | 18   | 21   |
+| `Massachusetts`| 18   | 21   |
+| `Michigan`     | 18   | 18   |
+| `Minnesota`    | 18   | 21   |
+| `Mississippi`  | 21   | 21   |
+| `Missouri`     | 21   | 21   |
+| `Montana`      | 18   | 21   |
+| `Nebraska`     | 19   | 21   |
+| `Nevada`       | 18   | 18   |
+| `New Hampshire`| 21   | 21   |
+| `New Jersey`   | 21   | 21   |
+| `New Mexico`   | 21   | 21   |
+| `New York`     | 18   | 21   |
+| `North Carolina`| 18   | 21   |
+| `North Dakota` | 18   | 21   |
+| `Ohio`         | 18   | 21   |
+| `Oklahoma`     | 21   | 18   |
+| `Oregon`       | 21   | 21   |
+| `Pennsylvania` | 21   | 21   |
+| `Rhode Island` | 21   | 21   |
+| `South Carolina`| 18   | N/A  |
+| `South Dakota` | 18   | 18   |
+| `Tennessee`    | 18   | 21   |
+| `Texas`        | 18   | 21   |
+| `Utah`         | 21   | 21   |
+| `Vermont`      | 19   | N/A   |
+| `Virgin Islands`| 18   | N/A   |
+| `Virginia`     | 18   | 18   |
+| `Washington`   | 21   | 21   |
+| `West Virginia`| 18   | 21   |
+| `Wisconsin`    | 18   | 21   |
+| `Wyoming`      | 18   | 21   |
 
 &nbsp;
