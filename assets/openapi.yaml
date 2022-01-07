@@ -1070,6 +1070,8 @@ components:
           type: string
           format: decimal
           example: '3.14'
+      required:
+        - id
     UpdateOrderRequest:
       type: object
       properties:
