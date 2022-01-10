@@ -1070,6 +1070,8 @@ components:
           type: string
           format: decimal
           example: '3.14'
+      required:
+        - id
     UpdateOrderRequest:
       type: object
       properties:
@@ -1654,6 +1656,9 @@ components:
         fractionable:
           type: boolean
           example: true
+      required:
+        - id
+        - symbol
     Position:
       description: ''
       type: object
@@ -1896,6 +1901,9 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Asset'
+      required:
+        - id
+        - name
   responses:
     Forbidden:
       description: Request is forbidden
@@ -3011,7 +3019,7 @@ paths:
   /events/trades:
     get:
       security:
-        - BasicAuth: [ ]
+        - BasicAuth: []
       summary: Subscribe to events related to trade updates (SSE).
       tags:
         - Trading
@@ -3050,7 +3058,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/TradeUpdatesEvent'
-              examples: { }
+              examples: {}
   /events/journals/status:
     get:
       security:
