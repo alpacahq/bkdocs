@@ -163,6 +163,7 @@ components:
         - ACTIVE
         - DISABLED
         - ACCOUNT_CLOSED
+        - ONBOARDING
       description: |
         - **SUBMITTED**
         The application has been submitted and in process.
@@ -180,6 +181,8 @@ components:
         The account is disabled after ACTIVE status.
         - **ACCOUNT_CLOSED**
         The account is closed.
+        - **ONBOARDING**
+        The account is currently being created.
     AccountExtended:
       type: object
       properties:
@@ -1405,7 +1408,7 @@ components:
             - $ref: '#/components/schemas/JNLC'
     JNLS:
       example:
-        id: h7h5g33f-ef01-4458-9a4b-9598727a406f
+        id: h7h5g33f-ef01-4458-9a4b-9598727a406g
         entry_type: JNLS
         from_account: 8fjkjn-4483-4199-840f-6c5fe0b7ca24
         to_account: 3gtt65jd-6f2a-433c-8c33-17b66b8941fa
@@ -3176,7 +3179,7 @@ paths:
               examples:
                 example:
                   value:
-                    - id: 3c2192da-6320-49cf-9374-ed63bbd8a5ca
+                    - id: 3c2192da-6320-49cf-9374-ed63bbd8a5cb
                       entry_type: JNLS
                       from_account: 6b61532b-773c-4cc7-92bc-d78b66454fbd
                       to_account: bee1b4d6-17cf-438b-a46d-75da5223e899
