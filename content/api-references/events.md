@@ -191,6 +191,7 @@ data:
       "asset_class":"us_equity",
       "asset_id":"b0b6dd9d-8b9b-48a9-ba46-b9d54906e415",
       "canceled_at":null,
+      "cancel_requested_at":null,
       "client_order_id":"d6499947-dacd-4f85-a728-81734dc39c27",
       "commission":"1.1",
       "created_at":"2021-06-14T10:04:05.150255Z",
