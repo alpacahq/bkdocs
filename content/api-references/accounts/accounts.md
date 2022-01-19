@@ -168,7 +168,7 @@ In order to comply with Alpaca's terms of service, each account owner must be pr
 
 1. **​`DocumentUpload`**
 
-   This model consists of a series of documents based on the KYC and international taxation requirements. Documents are binary objects whose contents are encoded in base64. Each encoded content size is limited to 10MB. The only exception is the W-8BEN form which we accept in multiple formats.
+   This model consists of a series of documents based on the KYC and international taxation requirements. Documents are binary objects whose contents are encoded in base64. Each encoded content size is limited to 10MB if you use Alpaca for KYCaaS. If you perform your own KYC there are no document size limitations. The only exception is the W-8BEN form which we accept in multiple formats.
 
    | Attribute           | Type                                                 |
    | ------------------- | ---------------------------------------------------- |
@@ -509,7 +509,7 @@ In order to comply with Alpaca's terms of service, each account owner must be pr
 
 1. **​`DocumentUpload`**
 
-   This model consists of a series of documents based on the KYC requirements. Documents are binary objects whose contents are encoded in base64. Each encoded content size is limited to 10MB.
+   This model consists of a series of documents based on the KYC requirements. Documents are binary objects whose contents are encoded in base64. Each encoded content size is limited to 10MB if you use Alpaca for KYCaaS. If you perform your own KYC there are no document size limitations.
 
    | Attribute           | Type                                                 | Required                              |
    | ------------------- | ---------------------------------------------------- | ------------------------------------- |
@@ -1095,6 +1095,8 @@ This operation updates account information. The following attribute are modifiab
 
 | Attribute                    | Key         | Required                           | Notes                                                          |
 | ---------------------------- | ----------- | ---------------------------------- | -------------------------------------------------------------- |
+| `given_name`                 | [].identity | {{<hint info>}}Optional{{</hint>}} | Name can only be updated once via API request. |
+| `family_name`                | [].identity | {{<hint info>}}Optional{{</hint>}} | Name can only be updated once via API request. |
 | `visa_type`                  | [].identity | {{<hint info>}}Optional{{</hint>}} | Only used to collect visa types for users residing in the USA. |
 | `visa_expiration_date`       | [].identity | {{<hint info>}}Optional{{</hint>}} | Required if `visa_type` is set.                                |
 | `date_of_departure_from_usa` | [].identity | {{<hint info>}}Optional{{</hint>}} | Required if `visa_type` = `B1` or `B2`                         |
