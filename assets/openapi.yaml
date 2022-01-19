@@ -164,6 +164,7 @@ components:
         - ACTIVE
         - DISABLED
         - ACCOUNT_CLOSED
+        - ONBOARDING
       description: |
         - **SUBMITTED**
         The application has been submitted and in process.
@@ -183,6 +184,8 @@ components:
         The account is disabled after ACTIVE status.
         - **ACCOUNT_CLOSED**
         The account is closed.
+        - **ONBOARDING**
+        The account is currently being created.
     AccountExtended:
       type: object
       properties:
@@ -1073,6 +1076,8 @@ components:
           type: string
           format: decimal
           example: '3.14'
+      required:
+        - id
     UpdateOrderRequest:
       type: object
       properties:
@@ -1410,7 +1415,7 @@ components:
             - $ref: '#/components/schemas/JNLC'
     JNLS:
       example:
-        id: h7h5g33f-ef01-4458-9a4b-9598727a406f
+        id: h7h5g33f-ef01-4458-9a4b-9598727a406g
         entry_type: JNLS
         from_account: 8fjkjn-4483-4199-840f-6c5fe0b7ca24
         to_account: 3gtt65jd-6f2a-433c-8c33-17b66b8941fa
@@ -1661,6 +1666,9 @@ components:
         fractionable:
           type: boolean
           example: true
+      required:
+        - id
+        - symbol
     Position:
       description: ''
       type: object
@@ -1850,6 +1858,32 @@ components:
         - status_to
         - reason
         - at
+    TradeUpdatesEvent:
+      description: ''
+      type: object
+      title: TradeUpdatesEvent
+      properties:
+        account_id:
+          type: string
+          minLength: 1
+        at:
+          type: string
+          minLength: 1
+        event:
+          type: string
+        event_id:
+          type: integer
+        execution_id:
+          type: integer
+        order:
+          $ref: '#/components/schemas/Order'
+      required:
+        - account_id
+        - at
+        - event
+        - event_id
+        - execution_id
+        - order
     Watchlist:
       title: Watchlist
       type: object
@@ -1873,11 +1907,13 @@ components:
           format: date-time
         name:
           type: string
-          pattern: '^[a-zA-Z0-9]+$'
         assets:
           type: array
           items:
             $ref: '#/components/schemas/Asset'
+      required:
+        - id
+        - name
   responses:
     Forbidden:
       description: Request is forbidden
@@ -2990,6 +3026,49 @@ paths:
               schema:
                 $ref: '#/components/schemas/AccountStatusEvent'
               examples: {}
+  /events/trades:
+    get:
+      security:
+        - BasicAuth: []
+      summary: Subscribe to events related to trade updates (SSE).
+      tags:
+        - Trading
+        - Events
+      description: |
+        Query Params Rules:
+        - `since` required if `until` specified
+        - `since_id` required if `until_id` specified
+        - `since` and `since_id` can’t be used at the same time
+        Behavior:
+        - if `since` or `since_id` not specified this will not return any historic data
+        - if `until` or `until_id` reached stream will end (status 200)
+      parameters:
+        - name: since
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: until
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: since_id
+          in: query
+          schema:
+            type: integer
+        - name: until_id
+          in: query
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Connected.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TradeUpdatesEvent'
+              examples: {}
   /events/journals/status:
     get:
       security:
@@ -3107,7 +3186,7 @@ paths:
               examples:
                 example:
                   value:
-                    - id: 3c2192da-6320-49cf-9374-ed63bbd8a5ca
+                    - id: 3c2192da-6320-49cf-9374-ed63bbd8a5cb
                       entry_type: JNLS
                       from_account: 6b61532b-773c-4cc7-92bc-d78b66454fbd
                       to_account: bee1b4d6-17cf-438b-a46d-75da5223e899
