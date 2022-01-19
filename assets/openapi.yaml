@@ -157,6 +157,7 @@ components:
       enum:
         - SUBMITTED
         - ACTION_REQUIRED
+        - EDITED
         - APPROVAL_PENDING
         - APPROVED
         - REJECTED
@@ -169,6 +170,8 @@ components:
         The application has been submitted and in process.
         - **ACTION_REQUIRED**
         The application requires manual action.
+        - **EDITED**
+        Application was edited (e.g. to match info from uploaded docs). This is a transient status.
         - **APPROVAL_PENDING**
         Initial value. The application approval process is in process.
         - **APPROVED**
@@ -319,7 +322,7 @@ components:
         content:
           type: string
           format: base64
-          example: QWxwYWNhcyBjYW5ub3QgbGl2ZSBhbG9uZS4=
+          example: /9j/Cg==
         mime_type:
           type: string
           example: image/jpeg
@@ -330,7 +333,7 @@ components:
       example:
         document_type: identity_verification
         document_sub_type: passport
-        content: QWxwYWNhcyBjYW5ub3QgbGl2ZSBhbG9uZS4=
+        content: /9j/Cg==
         mime_type: image/jpeg
     Activity:
       title: Activity
@@ -507,7 +510,7 @@ components:
         content:
           type: string
           format: base64
-          example: QWxwYWNhcyBjYW5ub3QgbGl2ZSBhbG9uZS4=
+          example: /9j/Cg==
         mime_type:
           type: string
           example: image/jpeg
@@ -518,7 +521,7 @@ components:
       example:
         document_type: identity_verification
         document_sub_type: passport
-        content: QWxwYWNhcyBjYW5ub3QgbGl2ZSBhbG9uZS4=
+        content: /9j/Cg==
         mime_type: image/jpeg
       title: DocumentUploadRequest
     KYCResult:
@@ -1263,10 +1266,14 @@ components:
               type: string
               enum:
                 - QUEUED
+                - APPROVAL_PENDING
                 - PENDING
+                - SENT_TO_CLEARING
                 - REJECTED
+                - CANCELED
                 - APPROVED
                 - COMPLETE
+                - RETURNED
             account_id:
               type: string
               format: uuid
