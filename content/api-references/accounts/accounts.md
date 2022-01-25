@@ -27,6 +27,7 @@ The Accounts API allows you to create and manage the accounts under your brokera
     "email_address": "cool_alpaca@example.com",
     "phone_number": "555-666-7788",
     "street_address": ["20 N San Mateo Dr"],
+    "unit": "Apt 1A",
     "city": "San Mateo",
     "state": "CA",
     "postal_code": "94401",
@@ -34,6 +35,7 @@ The Accounts API allows you to create and manage the accounts under your brokera
   },
   "identity": {
     "given_name": "John",
+    "middle_name": "Smith",
     "family_name": "Doe",
     "date_of_birth": "1990-01-01",
     "tax_id": "666-55-4321",
@@ -109,6 +111,7 @@ The Accounts API allows you to create and manage the accounts under your brokera
 | `email_address`  | string |
 | `phone_number`   | string |
 | `street_address` | array  |
+| `unit`           | string |
 | `city`           | string |
 | `state`          | string |
 | `postal_code`    | string |
@@ -118,6 +121,7 @@ The Accounts API allows you to create and manage the accounts under your brokera
 | Attribute                    | Type                                                            |
 | ---------------------------- | --------------------------------------------------------------- |
 | `given_name`                 | string                                                          |
+| `middle_name`                | string                                                          |
 | `family_name`                | string                                                          |
 | `date_of_birth`              | date                                                            |
 | `tax_id`                     | string                                                          |
@@ -375,6 +379,7 @@ Submit an account application with KYC information. This will create a trading a
     "email_address": "cool_alpaca@example.com",
     "phone_number": "555-666-7788",
     "street_address": ["20 N San Mateo Dr"],
+    "unit": "Apt 1A",
     "city": "San Mateo",
     "state": "CA",
     "postal_code": "94401",
@@ -382,6 +387,7 @@ Submit an account application with KYC information. This will create a trading a
   },
   "identity": {
     "given_name": "John",
+    "middle_name": "Smith",
     "family_name": "Doe",
     "date_of_birth": "1990-01-01",
     "tax_id": "666-55-4321",
@@ -450,6 +456,7 @@ Submit an account application with KYC information. This will create a trading a
 | `email_address`  | string | {{<hint danger>}}Required {{</hint>}} |                                                                                                        |
 | `phone_number`   | string | {{<hint danger>}}Required {{</hint>}} | _Phone number should include the country code, format: "+15555555555"_                                 |
 | `street_address` | string | {{<hint danger>}}Required {{</hint>}} |                                                                                                        |
+| `unit`           | string | {{<hint info>}}Optional {{</hint>}}   |                                                                                                        |
 | `city`           | string | {{<hint danger>}}Required {{</hint>}} |                                                                                                        |
 | `state`          | string | {{<hint info>}}Optional{{</hint>}}    | {{<hint danger>}}required if `country_of_tax_residency` in identity model (below) is ‘USA’ {{</hint>}} |
 | `postal_code`    | string | {{<hint info>}}Optional {{</hint>}}   |                                                                                                        |
@@ -459,6 +466,7 @@ Submit an account application with KYC information. This will create a trading a
 | Attribute                    | Type                                                   | Requirement                           | Notes                                                          |
 | ---------------------------- | ------------------------------------------------------ | ------------------------------------- | -------------------------------------------------------------- |
 | `given_name`                 | string                                                 | {{<hint danger>}}Required {{</hint>}} |                                                                |
+| `middle_name`                | string                                                 | {{<hint info>}}Optional {{</hint>}}   |                                                                |
 | `family_name`                | string                                                 | {{<hint danger>}}Required {{</hint>}} |                                                                |
 | `date_of_birth`              | date                                                   | {{<hint danger>}}Required {{</hint>}} |                                                                |
 | `tax_id`                     | string                                                 | {{<hint info>}}Optional {{</hint>}}   | Required if `tax_id_type` is set.                              |
@@ -1083,6 +1091,7 @@ This operation updates account information. The following attribute are modifiab
 | `email_address`  | [].contact | {{<hint info>}}Optional{{</hint>}} | Email addresses should be verified prior to using this operation to update them |
 | `phone_number`   | [].contact | {{<hint info>}}Optional{{</hint>}} |                                                                                 |
 | `street_address` | [].contact | {{<hint info>}}Optional{{</hint>}} |                                                                                 |
+| `unit`           | [].contact | {{<hint info>}}Optional{{</hint>}} |                                                                                 |
 | `city`           | [].contact | {{<hint info>}}Optional{{</hint>}} |                                                                                 |
 | `state`          | [].contact | {{<hint info>}}Optional{{</hint>}} |                                                                                 |
 | `postal_code`    | [].contact | {{<hint info>}}Optional{{</hint>}} |                                                                                 |
@@ -1095,8 +1104,9 @@ This operation updates account information. The following attribute are modifiab
 
 | Attribute                    | Key         | Required                           | Notes                                                          |
 | ---------------------------- | ----------- | ---------------------------------- | -------------------------------------------------------------- |
-| `given_name`                 | [].identity | {{<hint info>}}Optional{{</hint>}} | Name can only be updated once via API request. |
-| `family_name`                | [].identity | {{<hint info>}}Optional{{</hint>}} | Name can only be updated once via API request. |
+| `given_name`                 | [].identity | {{<hint info>}}Optional{{</hint>}} | Name can only be updated once via API request.                 |
+| `middle_name`                | [].identity | {{<hint info>}}Optional{{</hint>}} | Name can only be updated once via API request.                 |
+| `family_name`                | [].identity | {{<hint info>}}Optional{{</hint>}} | Name can only be updated once via API request.                 |
 | `visa_type`                  | [].identity | {{<hint info>}}Optional{{</hint>}} | Only used to collect visa types for users residing in the USA. |
 | `visa_expiration_date`       | [].identity | {{<hint info>}}Optional{{</hint>}} | Required if `visa_type` is set.                                |
 | `date_of_departure_from_usa` | [].identity | {{<hint info>}}Optional{{</hint>}} | Required if `visa_type` = `B1` or `B2`                         |
