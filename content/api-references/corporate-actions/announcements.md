@@ -37,7 +37,7 @@ Announcement data is made available through the API as soon as it is ingested by
 
 ### ENUM.CorporateActionType
 
-| Attribute  | Subtype             | Description                       |
+| Type       | Subtype             | Description                       |
 | ---------  | ------------------- | --------------------------------- |
 | `dividend` | `cash`              | A cash payment based on the number of shares the account holds on the record date. |
 | `dividend` | `stock`             | A stock payment based on the number of shares the account holds on the record date. |
