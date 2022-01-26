@@ -214,6 +214,16 @@ In addition, only one of the following is **required**,
 | `postal_code`    | string |
 | `country`        | string |
 
+**Trading Configurations**
+
+This model input is optional. 
+
+| Attribute     | Type   | Notes      |
+| ------------- | ------ | ---------- |
+| `dtbp_check`  | string | Optional. The default is: nullOther information: both, entry, or exit. Controls Day Trading Margin Call (DTMC) checks. |
+| `fractional_trading` | string | Last name  |
+
+
 ### Enums
 
 #### Tax ID Type
