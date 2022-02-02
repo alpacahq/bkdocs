@@ -223,13 +223,12 @@ This model input is optional. Trading configurations can also be changed after a
 | ------------- | ------ | ---------- |
 | `dtbp_check`  | string | Optional. The default is null. Options are: "both", "entry", or "exit". Controls Day Trading Margin Call (DTMC) checks. |
 | `fractional_trading` | boolean | Optional. The default is null. If true, account is able to participate in fractional trading  |
-| `max_margin_multiplier` | string | Optional. The default is null. Can be "1" or "2" or "4" see note (*) below |
+| `max_margin_multiplier` | string | Optional. The default is null. Can be "1" or "2" or "4". The margin multiplier given to the account will never exceed the value given here. |
 | `no_shorting` | boolean | Optional. The default is null. If true, account becomes long-only mode.  |
 | `pdt_check` | string | Optional. The default is null. Options are: "both", "entry", or "exit". Controls Day Trading Margin Call (DTMC) checks. |
 | `suspend_trade` | boolean | Optional. The default is null. If true, account is able to participate in fractional trading  |
 | `trade_confirm_email` | string | Optional. The default is null. Options are "all" or "none". If "none", emails for order fills are not sent. |
 
-(*) note: The margin given to an account is min(system_calculated_margin, max_margin_multiplier). The system_calculated_margin is 1 for accounts with assets less than $2k USD, 2 for accounts with between $2k USD - $25k USD and 4 for accounts with assets over $25k USD. And the max_margin_muliplier can be set in the post request.
 
 ### Enums
 
