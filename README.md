@@ -1,6 +1,6 @@
-# broker-api-docs-hugo
+# broker-api-docs-hugo [:warning: Deprecated]
 
-This is the staging branch of the documentation.
+This repo is no longer maintained. For latest documentation and OpenAPI specs visit: https://github.com/alpacahq/alpaca-docs
 
 1. Clone repo `git clone`
 
