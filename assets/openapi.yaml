@@ -1172,6 +1172,77 @@ components:
         - bank_code
         - bank_code_type
         - account_number
+    Announcements:
+      title: Announcements
+      type: object
+      properties:
+        id:
+          type: string
+          example: b14e356f-3e53-4926-8b9c-2696449c8a35
+        corporate_action_id:
+          type: string
+          example: 48251W104_AD21
+        ca_type:
+          type: string
+          enum:
+            - dividend
+            - merger
+            - spinoff
+            - split
+        ca_sub_type:
+          type: string
+          enum:
+            - cash
+            - stock
+            - unit_split
+            - stock_split
+            - reverse_split
+            - recapitalization
+        initiating_symbol:
+          type: string
+          example: KKR
+        initiating_original_cusip:
+          type: string
+          example: G52830109
+        target_symbol:
+          type: string
+          example: KKR
+        target_original_cusip:
+          type: string
+          example: G52830109
+        declaration_date:
+          type: string
+          example: '2021-11-01'
+        ex_date:
+          type: string
+          format: date
+          example: '2021-11-12'
+        record_date:
+          type: string
+          example: '2021-11-15'
+        payable_date:
+          type: string
+          example: '2021-11-30'
+        cash:
+          type: string
+          example: 0.145
+        old_rate:
+          type: string
+          example: 1
+        new_rate:
+          type: string
+          example: 1
+      required:
+        - id
+        - corporate_action_id
+        - ca_type
+        - initiating_symbol
+        - initiating_original_cusip
+        - declaration_date
+        - payable_date
+        - cash
+        - old_rate
+        - new_rate
     IdentifiedResource:
       title: IdentifiedResource
       type: object
@@ -2892,6 +2963,58 @@ paths:
                 $ref: '#/components/schemas/Asset'
         '404':
           description: Asset not found
+  '/corporate_actions/announcements/':
+    get:
+      security:
+        - BasicAuth: []
+      tags:
+        - Corporate Actions
+      summary: Retrieve corporate action announcements
+      parameters:
+        - name: ca_types
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: since
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: until
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: date_type
+          in: query
+          schema:
+            type: string
+        - name: symbol
+          in: query
+          schema:
+            type: string
+        - name: cusip
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success. Returns the announcement object.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Announcements'
+        '400':
+          description: Bad request. The body in the request is not valid.
+        '422':
+          description: Unprocessable entity. Invalid input value.
+        '500':
+          description: Internal Server Error. A server error occurred. Please contact Alpaca.
+      operationId: get_announcements
+      description: ''
   /calendar:
     get:
       security:
