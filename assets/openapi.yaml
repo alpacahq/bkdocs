@@ -1874,7 +1874,8 @@ components:
         event_id:
           type: integer
         execution_id:
-          type: integer
+          type: string
+          format: uuid
         order:
           $ref: '#/components/schemas/Order'
       required:
